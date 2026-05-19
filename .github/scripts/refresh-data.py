@@ -1,0 +1,210 @@
+#!/usr/bin/env python3
+"""
+Trivium DSP data refresh — GitHub Actions runtime, multi-client monorepo.
+
+Called by .github/workflows/refresh-data.yml on a weekly cron.
+Hits /gmail-ingest once to pull any new Amazon Ads report emails into
+Netlify Blobs (Blobs are partitioned by client slug). Then for each
+client in CLIENTS, fetches its latest CSV via /data-export, aggregates
+to per-day in the 22-column TheraIce parser format, trims to the most
+recent 14 days, and writes to public/data/<slug>/dsp.csv.
+
+The workflow YAML handles git commit + push of all changed CSVs.
+
+Env vars (set in workflow):
+  AUTH_ADMIN_TOKEN   bearer token gating the Trivium auth site admin endpoints
+"""
+
+import os
+import sys
+import csv
+import json
+import urllib.request
+import urllib.error
+from collections import defaultdict
+from datetime import datetime, timezone
+from io import StringIO
+from pathlib import Path
+
+# ── Configuration ────────────────────────────────────────────
+
+AUTH_BASE = "https://trivium-amazon-ads-auth.netlify.app"
+AUTH_TOKEN = os.environ.get("AUTH_ADMIN_TOKEN")
+
+# Client roster — mirrors src/config/clients.ts. Slugs MUST match the patterns
+# in the auth site's gmail-ingest.mts REPORT_PATTERNS or the Blob won't be found.
+CLIENTS = [
+    {"slug": "mirai-clinical",        "slot": "dsp", "name": "Mirai Clinical"},
+    {"slug": "dura-cleanse",          "slot": "dsp", "name": "Dura Cleanse"},
+    {"slug": "fit-and-fresh",         "slot": "dsp", "name": "Fit & Fresh"},
+    {"slug": "survival-garden-seeds", "slot": "dsp", "name": "Survival Garden Seeds"},
+]
+
+if not AUTH_TOKEN:
+    sys.exit("ERR: AUTH_ADMIN_TOKEN not set. Add it as a GitHub repo secret.")
+
+# ── HTTP helpers ─────────────────────────────────────────────
+
+def http_get(url, headers=None):
+    req = urllib.request.Request(url, headers=headers or {})
+    try:
+        with urllib.request.urlopen(req, timeout=60) as resp:
+            return resp.status, dict(resp.headers), resp.read()
+    except urllib.error.HTTPError as e:
+        return e.code, dict(e.headers or {}), e.read() if hasattr(e, "read") else b""
+
+def auth_headers():
+    return {"Authorization": f"Bearer {AUTH_TOKEN}"}
+
+# ── Aggregation ──────────────────────────────────────────────
+
+def num(s):
+    if s is None:
+        return 0.0
+    s = str(s).replace("=", "").replace('"', "").replace("%", "").replace(",", "").strip()
+    try:
+        return float(s) if s else 0.0
+    except ValueError:
+        return 0.0
+
+def aggregate_dsp(raw_csv):
+    """
+    Per-(date × campaign × ad group × ad) granular Amazon DSP CSV
+    → per-day summary in 22-column TheraIce parser format,
+    trimmed to the most recent 14 days.
+    """
+    rows = list(csv.DictReader(StringIO(raw_csv)))
+    if not rows:
+        raise ValueError("Empty CSV")
+
+    by_date = defaultdict(lambda: defaultdict(float))
+    brand = ""
+    brand_id = 0.0
+
+    for r in rows:
+        d = r["Date"].strip()
+        if not brand:
+            brand = r.get("Advertiser account name", "").strip()
+            brand_id = num(r.get("Advertiser account ID", ""))
+        by_date[d]["spend"]               += num(r.get("Total cost"))
+        by_date[d]["impressions"]         += num(r.get("Impressions"))
+        by_date[d]["clicks"]              += num(r.get("Click-throughs"))
+        by_date[d]["dpv"]                 += num(r.get("DPV"))
+        by_date[d]["atc"]                 += num(r.get("ATC"))
+        by_date[d]["purchases"]           += num(r.get("Purchases"))
+        by_date[d]["ntb_purchases"]       += num(r.get("New-to-brand purchases"))
+        by_date[d]["sales"]               += num(r.get("Sales USD"))
+        by_date[d]["total_dpv"]           += num(r.get("Total DPV"))
+        by_date[d]["total_atc"]           += num(r.get("Total ATC"))
+        by_date[d]["total_purchases"]     += num(r.get("Total purchases"))
+        by_date[d]["total_ntb_purchases"] += num(r.get("Total new-to-brand purchases"))
+        by_date[d]["total_sales"]         += num(r.get("Total sales USD"))
+        by_date[d]["total_ntb_sales"]     += num(r.get("Total new-to-brand product sales USD"))
+
+    # Amazon sends "Previous 30 days" — trim to the most recent 14 for the
+    # rolling 2-week dashboard window. Fewer than 14 → keep what we have.
+    all_dates = sorted(by_date.keys(), key=lambda d: datetime.strptime(d, "%b %d, %Y"))
+    dates = all_dates[-14:]
+
+    HEADER = [
+        "Date", "Advertiser account name", "Advertiser account ID",
+        "Total cost", "Impressions", "CTR", "DPV", "ATC",
+        "Purchases", "New-to-brand purchases", "Percent of purchases new-to-brand",
+        "Sales USD", "New-to-brand product sales USD",
+        "Total DPV", "Total ATC", "Total purchases", "Total new-to-brand purchases",
+        "Total new-to-brand purchases clicks",
+        "Total percent of purchases new-to-brand", "Total sales USD",
+        "Total ROAS", "Total new-to-brand product sales USD",
+    ]
+
+    out = StringIO()
+    w = csv.writer(out, quoting=csv.QUOTE_ALL)
+    w.writerow(HEADER)
+    for d in dates:
+        a = by_date[d]
+        ctr_pct       = (a["clicks"] / a["impressions"] * 100) if a["impressions"] else 0
+        ntb_pct       = (a["ntb_purchases"] / a["purchases"] * 100) if a["purchases"] else 0
+        total_ntb_pct = (a["total_ntb_purchases"] / a["total_purchases"] * 100) if a["total_purchases"] else 0
+        total_roas    = (a["total_sales"] / a["spend"]) if a["spend"] else 0
+        w.writerow([
+            d, brand, f'="{int(brand_id)}"',
+            f"{a['spend']:.5f}", int(a["impressions"]), f"{ctr_pct:.4f}%",
+            int(a["dpv"]), int(a["atc"]),
+            int(a["purchases"]), int(a["ntb_purchases"]), f"{ntb_pct:.4f}%",
+            f"{a['sales']:.5f}", "0.00000",
+            int(a["total_dpv"]), int(a["total_atc"]),
+            int(a["total_purchases"]), int(a["total_ntb_purchases"]), 0,
+            f"{total_ntb_pct:.4f}%", f"{a['total_sales']:.5f}",
+            f"{total_roas:.5f}", f"{a['total_ntb_sales']:.5f}",
+        ])
+    return out.getvalue(), len(dates)
+
+# ── Per-client refresh ───────────────────────────────────────
+
+def refresh_one(client):
+    slug, slot, name = client["slug"], client["slot"], client["name"]
+    print(f"\n--- {name} ({slug}/{slot}) ---")
+
+    url = f"{AUTH_BASE}/data-export?client={slug}&slot={slot}&latest=true"
+    status, headers, body = http_get(url, auth_headers())
+    if status == 404:
+        print(f"  ⊘ no CSV yet for this client (skipping — will appear next run)")
+        return False
+    if status != 200:
+        print(f"  ✗ data-export FAILED {status}: {body[:300]!r}")
+        return False
+
+    captured = headers.get("x-captured-at") or headers.get("X-Captured-At") or "unknown"
+    print(f"  ✓ fetched {len(body)} bytes (captured {captured})")
+
+    try:
+        agg_csv, ndays = aggregate_dsp(body.decode("utf-8"))
+    except Exception as e:
+        print(f"  ✗ aggregation failed: {e}")
+        return False
+
+    out_path = Path(f"public/data/{slug}/dsp.csv")
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_text(agg_csv)
+    print(f"  ✓ wrote {out_path} ({ndays} daily rows)")
+    return True
+
+# ── Main ─────────────────────────────────────────────────────
+
+def main():
+    print(f"=== Trivium DSP refresh @ {datetime.now(timezone.utc).isoformat()} ===")
+    print(f"  clients = {[c['slug'] for c in CLIENTS]}")
+    print()
+
+    # 1. Trigger /gmail-ingest ONCE — it processes all recent Amazon emails
+    #    and partitions blobs by client slug based on REPORT_PATTERNS.
+    print(f"[ingest] calling {AUTH_BASE}/gmail-ingest?lookback_days=14")
+    status, _, body = http_get(f"{AUTH_BASE}/gmail-ingest?lookback_days=14", auth_headers())
+    if status != 200:
+        print(f"  ✗ FAILED {status}: {body[:500]!r}")
+        sys.exit(1)
+    data = json.loads(body)
+    print(
+        f"  ✓ found={data.get('found', 0)} "
+        f"processed={len(data.get('processed', []))} "
+        f"skipped={len(data.get('skipped', []))} "
+        f"errors={len(data.get('errors', []))}"
+    )
+    for err in data.get("errors", []):
+        print(f"    ! ingest error: {err}")
+
+    # 2. For each client, fetch + aggregate + write
+    refreshed = []
+    skipped = []
+    for c in CLIENTS:
+        if refresh_one(c):
+            refreshed.append(c["slug"])
+        else:
+            skipped.append(c["slug"])
+
+    print(f"\n=== Done ===")
+    print(f"  refreshed: {refreshed or '(none)'}")
+    print(f"  skipped:   {skipped or '(none)'}")
+
+if __name__ == "__main__":
+    main()

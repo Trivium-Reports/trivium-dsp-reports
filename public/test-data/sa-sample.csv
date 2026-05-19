@@ -1,0 +1,5 @@
+campaign_name,campaign_id,ad_type,spend,impressions,clicks,ctr,sales
+NeuroPeak SP Brand,SA-001,Sponsored Products,2800,500000,7500,1.50,12000
+NeuroPeak SP Category,SA-002,Sponsored Products,3500,900000,5400,0.60,8500
+NeuroPeak SB Video,SA-003,Sponsored Brands,1200,300000,2100,0.70,3200
+NeuroPeak SD Retarget,SA-004,Sponsored Display,900,200000,1400,0.70,2100

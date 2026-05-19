@@ -1,0 +1,61 @@
+name: DSP data refresh (all clients)
+
+# Runs every Monday at 13:00 UTC (≈ 6 AM PDT / 5 AM PST).
+# Sunday/Monday's Amazon DSP report emails for ALL clients land in
+# ppc@triviumco.com overnight; this workflow ingests them once, then
+# fetches + aggregates + writes per-client CSVs to public/data/<slug>/dsp.csv.
+# Netlify auto-deploys on the commit.
+#
+# Also supports manual triggering via the "Run workflow" button on
+# https://github.com/Trivium-Reports/trivium-dsp-reports/actions
+# — useful for backfills or ad-hoc data refreshes.
+#
+# Required repo secret: AUTH_ADMIN_TOKEN
+# (gates the Trivium auth site's admin endpoints).
+# Set at: Settings → Secrets and variables → Actions → New repository secret.
+
+on:
+  workflow_dispatch:        # manual trigger from GitHub UI
+  schedule:
+    - cron: '0 13 * * 1'    # every Monday 13:00 UTC
+
+# Allow the workflow to push a commit back to this repo
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Refresh all clients (ingest → fetch → aggregate → write)
+        env:
+          AUTH_ADMIN_TOKEN: ${{ secrets.AUTH_ADMIN_TOKEN }}
+        run: python3 .github/scripts/refresh-data.py
+
+      - name: Commit and push if data changed
+        run: |
+          if git diff --quiet -- public/data/; then
+            echo "✓ No data changes — skipping commit"
+            exit 0
+          fi
+          echo "✓ Data changed — committing"
+          git config --local user.name  "trivium-data-bot[bot]"
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/data/
+          # NOTE: do NOT include [skip ci] — Netlify respects it and would skip
+          # the rebuild. We rely on this workflow firing only on schedule +
+          # workflow_dispatch (NOT on push), so there's no infinite loop risk.
+          git commit -m "data refresh: $(date -u +%Y-%m-%d)"
+          git push
+          echo "✓ Pushed — Netlify will auto-deploy"

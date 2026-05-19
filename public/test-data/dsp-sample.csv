@@ -1,0 +1,5 @@
+campaign_name,campaign_id,spend,impressions,clicks,ctr,detail_page_view_rate,sales
+NeuroPeak TOF Awareness,DSP-001,4500,1200000,3600,0.30,0.85,2100
+NeuroPeak MOF Retarget,DSP-002,3200,800000,4800,0.60,1.20,5400
+NeuroPeak BOF Convert,DSP-003,2100,400000,3200,0.80,2.10,8900
+NeuroPeak Brand Defense,DSP-004,1800,600000,1800,0.30,0.45,1200
