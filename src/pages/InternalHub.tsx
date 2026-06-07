@@ -50,9 +50,12 @@ const InternalHub = () => {
             return;
           }
           const lines = trimmed.split("\n");
-          // Parse the LAST data row's first column (Date)
+          // Parse the LAST data row's first column (Date). The CSV is
+          // QUOTE_ALL so dates like "Jun 06, 2026" contain a comma —
+          // can't naive-split on comma. Extract the first quoted field.
           const lastRow = lines[lines.length - 1];
-          const firstCell = lastRow.split(",")[0]?.replaceAll('"', "").trim() || "";
+          const m = lastRow.match(/^"([^"]+)"/);
+          const firstCell = (m ? m[1] : lastRow.split(",")[0] ?? "").trim();
           const parsed = new Date(firstCell);
           const ageDays = isNaN(parsed.getTime())
             ? Infinity
@@ -62,7 +65,7 @@ const InternalHub = () => {
             [client.slug]: {
               freshness: ageDays <= RECENT_THRESHOLD_DAYS ? "fresh" : "stale",
               rows: lines.length - 1,
-              latestDate: isNaN(parsed.getTime()) ? firstCell : firstCell,
+              latestDate: firstCell,
             },
           }));
         })
