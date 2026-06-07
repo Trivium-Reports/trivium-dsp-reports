@@ -26,11 +26,15 @@ const Index = () => {
     fetch(`/data/${client.slug}/dsp.csv`)
       .then(r => {
         if (!r.ok) throw new Error(`CSV fetch failed: ${r.status}`);
+        // SPA fallback returns text/html when the file doesn't exist
+        const ct = r.headers.get("content-type") || "";
+        if (ct.includes("text/html")) throw new Error("html_fallback");
         return r.text();
       })
       .then(text => {
-        // Header-only or empty file = report not yet ingested
-        if (!text.trim() || text.trim().split("\n").length < 2) {
+        const trimmed = text.trim();
+        // Defensive: HTML fallback (starts with "<") or empty / header-only file
+        if (!trimmed || trimmed.startsWith("<") || trimmed.split("\n").length < 2) {
           setLoadError("Report not yet generated. Data will appear once the next refresh runs.");
           return;
         }

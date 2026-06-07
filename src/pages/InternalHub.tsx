@@ -32,17 +32,24 @@ const InternalHub = () => {
     let cancelled = false;
     CLIENTS.filter(c => c.active).forEach(client => {
       fetch(`/data/${client.slug}/dsp.csv`)
-        .then(r => (r.ok ? r.text() : Promise.reject(r.status)))
+        .then(r => {
+          if (!r.ok) return Promise.reject(r.status);
+          // SPA fallback returns text/html when file is missing — treat as "pending"
+          const ct = r.headers.get("content-type") || "";
+          if (ct.includes("text/html")) return Promise.reject("html_fallback");
+          return r.text();
+        })
         .then(text => {
           if (cancelled) return;
-          const lines = text.trim().split("\n");
-          if (lines.length < 2) {
+          const trimmed = text.trim();
+          if (!trimmed || trimmed.startsWith("<") || trimmed.split("\n").length < 2) {
             setStatuses(s => ({
               ...s,
               [client.slug]: { freshness: "pending", rows: 0, latestDate: null },
             }));
             return;
           }
+          const lines = trimmed.split("\n");
           // Parse the LAST data row's first column (Date)
           const lastRow = lines[lines.length - 1];
           const firstCell = lastRow.split(",")[0]?.replaceAll('"', "").trim() || "";
