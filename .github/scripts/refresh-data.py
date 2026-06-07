@@ -36,8 +36,25 @@ AUTH_TOKEN = os.environ.get("AUTH_ADMIN_TOKEN")
 CLIENTS = [
     {"slug": "mirai-clinical",        "slot": "dsp", "name": "Mirai Clinical"},
     {"slug": "dura-cleanse",          "slot": "dsp", "name": "Dura Cleanse"},
-    {"slug": "fit-and-fresh",         "slot": "dsp", "name": "Fit & Fresh"},
+    {"slug": "fit-and-fresh",         "slot": "dsp", "name": "Fit + Fresh"},
     {"slug": "survival-garden-seeds", "slot": "dsp", "name": "Survival Garden Seeds"},
+    # Onboarded 2026-06-08 — second wave: 14 brands
+    {"slug": "primal-queen",          "slot": "dsp", "name": "Primal Queen"},
+    {"slug": "woxer",                 "slot": "dsp", "name": "Woxer"},
+    {"slug": "wander-beauty",         "slot": "dsp", "name": "Wander Beauty"},
+    {"slug": "sprinkle-and-sweep",    "slot": "dsp", "name": "Sprinkle & Sweep"},
+    {"slug": "paradise-naturals",     "slot": "dsp", "name": "Paradise Naturals"},
+    {"slug": "healthy-bones",         "slot": "dsp", "name": "Healthy Bones"},
+    {"slug": "probiora",              "slot": "dsp", "name": "ProBiora Plus"},
+    {"slug": "honey-bae",             "slot": "dsp", "name": "Honey Bae"},
+    {"slug": "sud-scrub",             "slot": "dsp", "name": "Sud Scrub"},
+    {"slug": "future-kind",           "slot": "dsp", "name": "Future Kind+"},
+    {"slug": "jarmino",               "slot": "dsp", "name": "Jarmino"},
+    {"slug": "daron",                 "slot": "dsp", "name": "Daron Worldwide"},
+    {"slug": "theraice",              "slot": "dsp", "name": "TheraICE"},
+    {"slug": "dexas",                 "slot": "dsp", "name": "Dexas"},
+    # Mirai-only: Sponsored Ads conversion path report (different data shape, pass-through)
+    {"slug": "mirai-clinical",        "slot": "conv-path", "name": "Mirai Clinical (conv path)"},
 ]
 
 if not AUTH_TOKEN:
@@ -148,7 +165,7 @@ def refresh_one(client):
     url = f"{AUTH_BASE}/data-export?client={slug}&slot={slot}&latest=true"
     status, headers, body = http_get(url, auth_headers())
     if status == 404:
-        print(f"  ⊘ no CSV yet for this client (skipping — will appear next run)")
+        print(f"  ⊘ no CSV yet for this client/slot (skipping — will appear next run)")
         return False
     if status != 200:
         print(f"  ✗ data-export FAILED {status}: {body[:300]!r}")
@@ -157,17 +174,40 @@ def refresh_one(client):
     captured = headers.get("x-captured-at") or headers.get("X-Captured-At") or "unknown"
     print(f"  ✓ fetched {len(body)} bytes (captured {captured})")
 
+    # Per-slot handling. DSP gets 14-day aggregation; conv-path is a different
+    # report shape (Sponsored Ads conversion path) — pass through as-is.
+    raw = body.decode("utf-8")
     try:
-        agg_csv, ndays = aggregate_dsp(body.decode("utf-8"))
+        if slot == "dsp":
+            out_csv, n = aggregate_dsp(raw)
+            row_label = f"{n} daily rows"
+        elif slot == "conv-path":
+            out_csv, n = passthrough_csv(raw)
+            row_label = f"{n} path rows"
+        else:
+            # Default to pass-through for unknown slots
+            out_csv, n = passthrough_csv(raw)
+            row_label = f"{n} rows"
     except Exception as e:
-        print(f"  ✗ aggregation failed: {e}")
+        print(f"  ✗ processing failed: {e}")
         return False
 
-    out_path = Path(f"public/data/{slug}/dsp.csv")
+    out_path = Path(f"public/data/{slug}/{slot}.csv")
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    out_path.write_text(agg_csv)
-    print(f"  ✓ wrote {out_path} ({ndays} daily rows)")
+    out_path.write_text(out_csv)
+    print(f"  ✓ wrote {out_path} ({row_label})")
     return True
+
+
+def passthrough_csv(raw_csv: str):
+    """Light pass-through for non-DSP slots: strips BOM, normalises line endings,
+    counts data rows. Keeps the schema as Amazon delivered it."""
+    cleaned = raw_csv.lstrip("﻿").replace("\r\n", "\n").replace("\r", "\n")
+    lines = [line for line in cleaned.split("\n") if line.strip()]
+    if not lines:
+        raise ValueError("Empty CSV")
+    n_data_rows = max(0, len(lines) - 1)
+    return "\n".join(lines) + "\n", n_data_rows
 
 # ── Main ─────────────────────────────────────────────────────
 
