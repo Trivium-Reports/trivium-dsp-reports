@@ -5,12 +5,14 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import RootLanding from "./pages/RootLanding.tsx";
 import Index from "./pages/Index.tsx";
+import InternalHub from "./pages/InternalHub.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
 
 // Multi-client monorepo:
 //   /             → minimal Trivium-branded landing (NO client list — privacy by design)
+//   /internal     → internal team brand index (hidden URL — not linked anywhere public)
 //   /<slug>       → per-client DSP dashboard, loads /data/<slug>/dsp.csv
 //   /*  (other)   → 404
 const App = () => (
@@ -21,6 +23,7 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<RootLanding />} />
+          <Route path="/internal" element={<InternalHub />} />
           <Route path="/:slug" element={<Index />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
