@@ -35,12 +35,19 @@ const ConversionPathSection = ({ slug }: Props) => {
     fetch(`/data/${slug}/conv-path.csv`)
       .then(r => {
         if (!r.ok) throw new Error(`status ${r.status}`);
+        // SPA fallback returns text/html when file doesn't exist
+        const ct = r.headers.get("content-type") || "";
+        if (ct.includes("text/html")) throw new Error("html_fallback");
         return r.text();
       })
       .then(text => {
+        const trimmed = text.trim();
+        // Defensive: HTML or empty → no data
+        if (!trimmed || trimmed.startsWith("<") || trimmed.split("\n").length < 2) {
+          throw new Error("empty_or_html");
+        }
         setHadFile(true);
-        const parsed = parseConvPathReport(text);
-        setSummary(parsed);
+        setSummary(parseConvPathReport(text));
       })
       .catch(() => {
         setHadFile(false);
@@ -49,36 +56,11 @@ const ConversionPathSection = ({ slug }: Props) => {
       .finally(() => setLoading(false));
   }, [slug]);
 
-  // Render nothing if no conv-path data for this brand
+  // Render nothing if no conv-path data for this brand (silent no-op
+  // instead of an empty placeholder card per 2026-06-08 user direction)
   if (loading) return null;
   if (!hadFile || !summary) return null;
-  if (!summary.hasUsefulData) {
-    return (
-      <motion.section
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.6 }}
-        className="bg-card rounded-2xl border border-border shadow-sm overflow-hidden"
-      >
-        <div className="px-6 sm:px-8 py-8">
-          <div className="flex items-center gap-2 mb-3">
-            <GitBranch className="w-4 h-4 text-primary" />
-            <span className="uppercase tracking-[0.2em] text-[10px] font-display font-bold text-primary">
-              DSP × PPC Interaction
-            </span>
-          </div>
-          <h2 className="font-display font-extrabold text-2xl mb-2">
-            Conversion Path
-          </h2>
-          <p className="text-sm text-muted-foreground font-body">
-            Conversion path data ingested but no rows yet had usable metrics.
-            Columns detected: {summary.rawColumnNames.join(", ") || "(none)"}.
-          </p>
-        </div>
-      </motion.section>
-    );
-  }
+  if (!summary.hasUsefulData) return null;
 
   return (
     <motion.section
