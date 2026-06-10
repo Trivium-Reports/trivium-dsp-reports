@@ -111,6 +111,7 @@ def aggregate_dsp(raw_csv):
         by_date[d]["purchases"]           += num(r.get("Purchases"))
         by_date[d]["ntb_purchases"]       += num(r.get("New-to-brand purchases"))
         by_date[d]["sales"]               += num(r.get("Sales USD"))
+        by_date[d]["ntb_sales"]           += num(r.get("New-to-brand product sales USD"))
         by_date[d]["total_dpv"]           += num(r.get("Total DPV"))
         by_date[d]["total_atc"]           += num(r.get("Total ATC"))
         by_date[d]["total_purchases"]     += num(r.get("Total purchases"))
@@ -148,12 +149,46 @@ def aggregate_dsp(raw_csv):
             f"{a['spend']:.5f}", int(a["impressions"]), f"{ctr_pct:.4f}%",
             int(a["dpv"]), int(a["atc"]),
             int(a["purchases"]), int(a["ntb_purchases"]), f"{ntb_pct:.4f}%",
-            f"{a['sales']:.5f}", "0.00000",
+            f"{a['sales']:.5f}", f"{a['ntb_sales']:.5f}",
             int(a["total_dpv"]), int(a["total_atc"]),
             int(a["total_purchases"]), int(a["total_ntb_purchases"]), 0,
             f"{total_ntb_pct:.4f}%", f"{a['total_sales']:.5f}",
             f"{total_roas:.5f}", f"{a['total_ntb_sales']:.5f}",
         ])
+
+    # ── Sanity checks (added 2026-06-08 after the NTB-sales-stub bug) ──
+    # Catch silent-zero categories so we never ship hardcoded placeholder
+    # columns again. Each check is a logical invariant on aggregated input.
+    totals = {
+        k: sum(by_date[d][k] for d in dates)
+        for k in (
+            "spend", "impressions", "purchases",
+            "ntb_purchases", "ntb_sales",
+            "sales", "total_sales", "total_ntb_sales",
+        )
+    }
+    violations = []
+    if totals["ntb_purchases"] > 0 and totals["ntb_sales"] <= 0:
+        violations.append(
+            f"ntb_purchases={totals['ntb_purchases']:.0f} but ntb_sales=0 "
+            f"(input had non-zero NTB purchases — sales aggregation likely broken)"
+        )
+    if totals["purchases"] > 0 and totals["sales"] <= 0:
+        violations.append(
+            f"purchases={totals['purchases']:.0f} but sales=0 "
+            f"(sales column missing or mis-named in source CSV)"
+        )
+    if totals["impressions"] > 0 and totals["spend"] <= 0:
+        violations.append(
+            f"impressions={totals['impressions']:.0f} but spend=0 "
+            f"(spend column missing or mis-named)"
+        )
+    if violations:
+        raise ValueError(
+            "Data-quality sanity check failed:\n  - "
+            + "\n  - ".join(violations)
+        )
+
     return out.getvalue(), len(dates)
 
 # ── Per-client refresh ───────────────────────────────────────
