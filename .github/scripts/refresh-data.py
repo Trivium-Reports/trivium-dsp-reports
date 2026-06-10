@@ -84,6 +84,36 @@ def num(s):
     except ValueError:
         return 0.0
 
+def _first_present(row, *candidates):
+    """Return num(row[k]) for the first candidate key that exists in row,
+    else 0. Lets us tolerate Amazon header variants without exploding."""
+    for k in candidates:
+        if k in row:
+            return num(row[k])
+    return 0.0
+
+
+# NTB sales column variants (Amazon has shipped at least two of these)
+NTB_SALES_KEYS = (
+    "New-to-brand product sales USD",
+    "New-to-brand product sales (USD)",
+    "New-to-Brand product sales USD",
+    "New-to-Brand product sales (USD)",
+    "New to brand product sales USD",
+    "NTB product sales USD",
+)
+TOTAL_NTB_SALES_KEYS = (
+    "Total new-to-brand product sales USD",
+    "Total new-to-brand product sales (USD)",
+    "Total New-to-brand product sales USD",
+    "Total New-to-Brand product sales USD",
+    "Total New-to-Brand product sales (USD)",
+    "Total NTB product sales USD",
+)
+SALES_KEYS = ("Sales USD", "Sales (USD)", "Sales")
+TOTAL_SALES_KEYS = ("Total sales USD", "Total sales (USD)", "Total Sales USD", "Total sales")
+
+
 def aggregate_dsp(raw_csv):
     """
     Per-(date × campaign × ad group × ad) granular Amazon DSP CSV
@@ -93,6 +123,13 @@ def aggregate_dsp(raw_csv):
     rows = list(csv.DictReader(StringIO(raw_csv)))
     if not rows:
         raise ValueError("Empty CSV")
+
+    # Header echo — print once per brand so we can spot Amazon schema drift
+    # quickly. Tiny log cost, huge debugging payoff.
+    headers = list(rows[0].keys())
+    sample_ntb_like = [h for h in headers if "ntb" in h.lower() or "new-to" in h.lower() or "new to" in h.lower()]
+    print(f"  ⓘ source columns: {len(headers)} total")
+    print(f"    NTB-like headers: {sample_ntb_like}")
 
     by_date = defaultdict(lambda: defaultdict(float))
     brand = ""
@@ -110,14 +147,14 @@ def aggregate_dsp(raw_csv):
         by_date[d]["atc"]                 += num(r.get("ATC"))
         by_date[d]["purchases"]           += num(r.get("Purchases"))
         by_date[d]["ntb_purchases"]       += num(r.get("New-to-brand purchases"))
-        by_date[d]["sales"]               += num(r.get("Sales USD"))
-        by_date[d]["ntb_sales"]           += num(r.get("New-to-brand product sales USD"))
+        by_date[d]["sales"]               += _first_present(r, *SALES_KEYS)
+        by_date[d]["ntb_sales"]           += _first_present(r, *NTB_SALES_KEYS)
         by_date[d]["total_dpv"]           += num(r.get("Total DPV"))
         by_date[d]["total_atc"]           += num(r.get("Total ATC"))
         by_date[d]["total_purchases"]     += num(r.get("Total purchases"))
         by_date[d]["total_ntb_purchases"] += num(r.get("Total new-to-brand purchases"))
-        by_date[d]["total_sales"]         += num(r.get("Total sales USD"))
-        by_date[d]["total_ntb_sales"]     += num(r.get("Total new-to-brand product sales USD"))
+        by_date[d]["total_sales"]         += _first_present(r, *TOTAL_SALES_KEYS)
+        by_date[d]["total_ntb_sales"]     += _first_present(r, *TOTAL_NTB_SALES_KEYS)
 
     # Amazon sends "Previous 30 days" — trim to the most recent 14 for the
     # rolling 2-week dashboard window. Fewer than 14 → keep what we have.
