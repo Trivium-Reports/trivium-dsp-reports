@@ -148,7 +148,11 @@ def aggregate_dsp(raw_csv):
         by_date[d]["purchases"]           += num(r.get("Purchases"))
         by_date[d]["ntb_purchases"]       += num(r.get("New-to-brand purchases"))
         by_date[d]["sales"]               += _first_present(r, *SALES_KEYS)
-        by_date[d]["ntb_sales"]           += _first_present(r, *NTB_SALES_KEYS)
+        # Amazon DSP doesn't ship a click-attributed "New-to-brand product
+        # sales USD" column — only the 14-day attribution version. Alias
+        # ntb_sales to that single source so the dashboard's NTB Sales card
+        # displays the real value instead of a hardcoded $0.
+        by_date[d]["ntb_sales"]           += _first_present(r, *NTB_SALES_KEYS, *TOTAL_NTB_SALES_KEYS)
         by_date[d]["total_dpv"]           += num(r.get("Total DPV"))
         by_date[d]["total_atc"]           += num(r.get("Total ATC"))
         by_date[d]["total_purchases"]     += num(r.get("Total purchases"))
