@@ -553,6 +553,38 @@ const DSPReport = ({ data }: DSPReportProps) => {
             </div>
 
             <div className="space-y-3">
+              {/* Factual metric snapshot — numbers only, no interpretation.
+                  Visible in both /full and /visual modes so the visual URL
+                  has real data filling the right-column space next to the
+                  radar chart. */}
+              <div className="bg-background rounded-xl border border-border p-4">
+                <h4 className="font-display font-extrabold text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-3">
+                  Metrics vs Benchmarks
+                </h4>
+                <div className="space-y-2">
+                  {[
+                    { label: "CTR", value: fmtPct(data.avgCTR), benchmark: "0.60%" },
+                    { label: "DPV Rate", value: fmtPct(dpvRate), benchmark: "2.00%" },
+                    { label: "ATC Rate", value: fmtPct(atcRate), benchmark: "15.00%" },
+                    { label: "Purch. Rate", value: fmtPct(purchaseRate), benchmark: "45.00%" },
+                    { label: "NTB %", value: fmtPct(data.avgNTBPercent), benchmark: "80.00%" },
+                    { label: "ROAS", value: `${data.overallROAS.toFixed(2)}x`, benchmark: "10.00x" },
+                  ].map(m => (
+                    <div key={m.label} className="grid grid-cols-[1fr_auto_auto] items-baseline gap-3 pb-1.5 border-b border-border last:border-b-0 last:pb-0">
+                      <span className="font-display font-bold text-[11px] uppercase tracking-wide text-muted-foreground">
+                        {m.label}
+                      </span>
+                      <span className="font-display font-extrabold text-sm tabular-nums">
+                        {m.value}
+                      </span>
+                      <span className="font-body text-[10px] text-muted-foreground tabular-nums">
+                        vs {m.benchmark}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               <InsightCard icon={Sparkles} title="Engagement Multiplier">
                 Converters engage at <strong>2x–3x</strong> the rate of non-converters across DPV, ATC, and impression depth — proving that multi-touch exposure drives action.
               </InsightCard>
