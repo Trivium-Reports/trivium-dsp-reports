@@ -5,6 +5,12 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Visual-only mode (client-send URL /:slug/visual): hide all
+ * data-narrative="true" wrappers — SoWhatBox, InsightCard, ActionBox —
+ * so the shared page renders KPIs + charts + tables with no prose.
+ * Strategists compose their own narrative on top of the visual send. */
+[data-mode="visual"] [data-narrative="true"] { display: none !important; }
+
 @layer base {
   :root {
     --background: 33 38% 95%;
