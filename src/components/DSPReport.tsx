@@ -418,6 +418,28 @@ const DSPReport = ({ data }: DSPReportProps) => {
             </div>
 
             <div className="space-y-3">
+              {/* Factual period comparison — numbers only. */}
+              <div className="bg-background rounded-xl border border-border p-4">
+                <h4 className="font-display font-extrabold text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-3">
+                  Period Numbers
+                </h4>
+                <div className="space-y-2">
+                  {[
+                    { label: "Overall ROAS", value: `${data.overallROAS.toFixed(2)}x` },
+                    { label: "Avg CTR", value: fmtPct(data.avgCTR) },
+                    { label: "1st half ROAS", value: `${firstHalfROAS.toFixed(2)}x` },
+                    { label: "2nd half ROAS", value: `${secondHalfROAS.toFixed(2)}x` },
+                    { label: "Total Sales", value: fmtCurrency(data.totalSales) },
+                    { label: "Total Spend", value: fmtCurrency(data.totalSpend) },
+                  ].map(m => (
+                    <div key={m.label} className="grid grid-cols-[1fr_auto] items-baseline gap-3 pb-1.5 border-b border-border last:border-b-0 last:pb-0">
+                      <span className="font-display font-bold text-[11px] uppercase tracking-wide text-muted-foreground">{m.label}</span>
+                      <span className="font-display font-extrabold text-sm tabular-nums">{m.value}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               <InsightCard icon={TrendingUp} title="Efficiency Trajectory">
                 ROAS {roasTrend >= 0 ? 'improved' : 'declined'} from <strong>{firstHalfROAS.toFixed(2)}x</strong> → <strong>{secondHalfROAS.toFixed(2)}x</strong> across the reporting window. {roasTrend >= 0 ? 'Positive momentum.' : 'Investigate audience fatigue.'}
               </InsightCard>
@@ -701,6 +723,28 @@ const DSPReport = ({ data }: DSPReportProps) => {
             </div>
 
             <div className="space-y-3">
+              {/* Factual NTB rollup — numbers only. */}
+              <div className="bg-background rounded-xl border border-border p-4">
+                <h4 className="font-display font-extrabold text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-3">
+                  NTB Rollup (Period)
+                </h4>
+                <div className="space-y-2">
+                  {[
+                    { label: "NTB Purchases", value: fmt(data.totalNTBPurchases) },
+                    { label: "NTB Sales", value: fmtCurrency(data.totalNTBSales) },
+                    { label: "NTB %", value: fmtPct(data.avgNTBPercent) },
+                    { label: "NTB CPA", value: `$${ntbCPA.toFixed(2)}` },
+                    { label: "Total Purchases", value: fmt(data.totalPurchases) },
+                    { label: "Existing Sales", value: fmtCurrency(data.totalSales - data.totalNTBSales) },
+                  ].map(m => (
+                    <div key={m.label} className="grid grid-cols-[1fr_auto] items-baseline gap-3 pb-1.5 border-b border-border last:border-b-0 last:pb-0">
+                      <span className="font-display font-bold text-[11px] uppercase tracking-wide text-muted-foreground">{m.label}</span>
+                      <span className="font-display font-extrabold text-sm tabular-nums">{m.value}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               <InsightCard icon={CheckCircle2} title="True Incremental Value">
                 DSP prospecting is successfully acquiring <strong>{fmt(data.totalNTBPurchases)}</strong> customers who are new to brand, generating <strong>{fmtCurrency(data.totalNTBSales)}</strong> in incremental revenue.
               </InsightCard>
@@ -746,6 +790,38 @@ const DSPReport = ({ data }: DSPReportProps) => {
             </div>
 
             <div className="space-y-3">
+              {/* Factual day-of-week extremes — numbers only. */}
+              <div className="bg-background rounded-xl border border-border p-4">
+                <h4 className="font-display font-extrabold text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-3">
+                  Best & Worst Days
+                </h4>
+                <div className="space-y-2">
+                  <div className="grid grid-cols-[1fr_auto_auto] items-baseline gap-3 pb-1.5 border-b border-border">
+                    <span className="font-display font-bold text-[11px] uppercase tracking-wide text-muted-foreground">Best Day</span>
+                    <span className="font-display font-extrabold text-sm">{bestDow.day}</span>
+                    <span className="font-body text-[10px] text-muted-foreground tabular-nums">{bestDow.avgROAS.toFixed(2)}x</span>
+                  </div>
+                  <div className="grid grid-cols-[1fr_auto_auto] items-baseline gap-3 pb-1.5 border-b border-border">
+                    <span className="font-display font-bold text-[11px] uppercase tracking-wide text-muted-foreground">Best Avg Sales</span>
+                    <span className="font-display font-extrabold text-sm tabular-nums">${bestDow.avgSales.toFixed(0)}</span>
+                    <span className="font-body text-[10px] text-muted-foreground">{bestDow.day}</span>
+                  </div>
+                  <div className="grid grid-cols-[1fr_auto_auto] items-baseline gap-3 pb-1.5 border-b border-border">
+                    <span className="font-display font-bold text-[11px] uppercase tracking-wide text-muted-foreground">Weakest Day</span>
+                    <span className="font-display font-extrabold text-sm">{worstDow.day}</span>
+                    <span className="font-body text-[10px] text-muted-foreground tabular-nums">{worstDow.avgROAS.toFixed(2)}x</span>
+                  </div>
+                  <div className="grid grid-cols-[1fr_auto] items-baseline gap-3 pb-1.5 border-b border-border">
+                    <span className="font-display font-bold text-[11px] uppercase tracking-wide text-muted-foreground">ROAS Spread</span>
+                    <span className="font-display font-extrabold text-sm tabular-nums">{(bestDow.avgROAS - worstDow.avgROAS).toFixed(2)}x</span>
+                  </div>
+                  <div className="grid grid-cols-[1fr_auto] items-baseline gap-3">
+                    <span className="font-display font-bold text-[11px] uppercase tracking-wide text-muted-foreground">Days Covered</span>
+                    <span className="font-display font-extrabold text-sm tabular-nums">{data.rows.length}</span>
+                  </div>
+                </div>
+              </div>
+
               <InsightCard icon={ArrowUpRight} title="Best Day">
                 <strong>{bestDow.day}</strong> delivers the highest avg ROAS at <strong>{bestDow.avgROAS.toFixed(2)}x</strong> with <strong>${bestDow.avgSales.toFixed(0)}</strong> avg daily sales. Strongest efficiency window.
               </InsightCard>
