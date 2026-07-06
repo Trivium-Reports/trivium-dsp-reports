@@ -221,6 +221,45 @@ const DSPReport = ({ data }: DSPReportProps) => {
   const secondHalfROAS = secondHalf.reduce((s, r) => s + r.sales, 0) / secondHalf.reduce((s, r) => s + r.spend, 0);
   const roasTrend = secondHalfROAS - firstHalfROAS;
 
+  // Per-half rollups used by the visual-mode factual panels
+  // ("Week 2" = second half of window, "Week 1" = first half).
+  const aggHalf = (rows: typeof data.rows) => {
+    const spend = rows.reduce((s, r) => s + r.spend, 0);
+    const impressions = rows.reduce((s, r) => s + r.impressions, 0);
+    const dpv = rows.reduce((s, r) => s + r.dpv, 0);
+    const atc = rows.reduce((s, r) => s + r.atc, 0);
+    const purchases = rows.reduce((s, r) => s + r.purchases, 0);
+    const ntbPurchases = rows.reduce((s, r) => s + r.ntbPurchases, 0);
+    const sales = rows.reduce((s, r) => s + r.sales, 0);
+    const ntbSales = rows.reduce((s, r) => s + r.ntbSales, 0);
+    return {
+      spend, impressions, dpv, atc, purchases, ntbPurchases, sales, ntbSales,
+      ctr: impressions > 0 ? rows.reduce((s, r) => s + r.ctr * r.impressions, 0) / impressions : 0,
+      dpvRate: impressions > 0 ? (dpv / impressions) * 100 : 0,
+      atcRate: dpv > 0 ? (atc / dpv) * 100 : 0,
+      purchaseRate: atc > 0 ? (purchases / atc) * 100 : 0,
+      ntbPercent: purchases > 0 ? (ntbPurchases / purchases) * 100 : 0,
+      roas: spend > 0 ? sales / spend : 0,
+      ntbCPA: ntbPurchases > 0 ? spend / ntbPurchases : 0,
+      dayCount: rows.length,
+      startDate: rows[0]?.date ?? "",
+      endDate: rows[rows.length - 1]?.date ?? "",
+    };
+  };
+  const W1 = aggHalf(firstHalf);
+  const W2 = aggHalf(secondHalf);
+  // Delta = W2 - W1 for percentage-point metrics; for absolute numbers,
+  // compute the caller-side pct change inline.
+  const fmtDeltaPts = (a: number, b: number) => {
+    const d = a - b;
+    return `${d >= 0 ? "+" : ""}${d.toFixed(2)}`;
+  };
+  const fmtDeltaPct = (a: number, b: number) => {
+    if (b === 0) return "—";
+    const d = ((a - b) / b) * 100;
+    return `${d >= 0 ? "+" : ""}${d.toFixed(1)}%`;
+  };
+
   const bestDay = [...data.rows].sort((a, b) => b.sales - a.sales)[0];
   const worstDay = [...data.rows].sort((a, b) => a.sales - b.sales)[0];
   const bestROASDay = [...data.rows].sort((a, b) => (b.sales / (b.spend || 1)) - (a.sales / (a.spend || 1)))[0];
@@ -418,23 +457,30 @@ const DSPReport = ({ data }: DSPReportProps) => {
             </div>
 
             <div className="space-y-3">
-              {/* Factual period comparison — numbers only. */}
+              {/* Week 2 values with delta vs Week 1 of the same 14-day
+                  window. Numbers only, no interpretation. */}
               <div className="bg-background rounded-xl border border-border p-4">
-                <h4 className="font-display font-extrabold text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-3">
-                  Period Numbers
+                <h4 className="font-display font-extrabold text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">
+                  Metrics vs Previous Period
                 </h4>
+                <p className="font-body text-[10px] text-muted-foreground italic mb-3 leading-snug">
+                  Week 2 shown; delta vs Week 1 of the reporting window.
+                </p>
                 <div className="space-y-2">
                   {[
-                    { label: "Overall ROAS", value: `${data.overallROAS.toFixed(2)}x` },
-                    { label: "Avg CTR", value: fmtPct(data.avgCTR) },
-                    { label: "1st half ROAS", value: `${firstHalfROAS.toFixed(2)}x` },
-                    { label: "2nd half ROAS", value: `${secondHalfROAS.toFixed(2)}x` },
-                    { label: "Total Sales", value: fmtCurrency(data.totalSales) },
-                    { label: "Total Spend", value: fmtCurrency(data.totalSpend) },
+                    { label: "ROAS",   value: `${W2.roas.toFixed(2)}x`,     delta: fmtDeltaPct(W2.roas, W1.roas) },
+                    { label: "CTR",    value: fmtPct(W2.ctr),               delta: fmtDeltaPts(W2.ctr, W1.ctr) + " pts" },
+                    { label: "Sales",  value: fmtCurrency(W2.sales),        delta: fmtDeltaPct(W2.sales, W1.sales) },
+                    { label: "Spend",  value: fmtCurrency(W2.spend),        delta: fmtDeltaPct(W2.spend, W1.spend) },
+                    { label: "Impressions", value: fmt(W2.impressions),     delta: fmtDeltaPct(W2.impressions, W1.impressions) },
+                    { label: "Purchases",   value: fmt(W2.purchases),       delta: fmtDeltaPct(W2.purchases, W1.purchases) },
                   ].map(m => (
-                    <div key={m.label} className="grid grid-cols-[1fr_auto] items-baseline gap-3 pb-1.5 border-b border-border last:border-b-0 last:pb-0">
+                    <div key={m.label} className="grid grid-cols-[1fr_auto_auto] items-baseline gap-3 pb-1.5 border-b border-border last:border-b-0 last:pb-0">
                       <span className="font-display font-bold text-[11px] uppercase tracking-wide text-muted-foreground">{m.label}</span>
                       <span className="font-display font-extrabold text-sm tabular-nums">{m.value}</span>
+                      <span className={`font-body text-[10px] tabular-nums ${m.delta.startsWith("+") ? "text-emerald-600" : m.delta.startsWith("-") ? "text-red-600" : "text-muted-foreground"}`}>
+                        {m.delta} vs W1
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -575,22 +621,26 @@ const DSPReport = ({ data }: DSPReportProps) => {
             </div>
 
             <div className="space-y-3">
-              {/* Factual metric snapshot — numbers only, no interpretation.
-                  Visible in both /full and /visual modes so the visual URL
-                  has real data filling the right-column space next to the
-                  radar chart. */}
+              {/* Factual metric snapshot — Week 2 values with delta vs the
+                  prior half of the reporting window. Numbers only, no
+                  interpretation. Visible in both /full and /visual modes. */}
               <div className="bg-background rounded-xl border border-border p-4">
-                <h4 className="font-display font-extrabold text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-3">
-                  Metrics vs Benchmarks
-                </h4>
+                <div className="flex items-baseline justify-between mb-3">
+                  <h4 className="font-display font-extrabold text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
+                    Metrics vs Previous Period
+                  </h4>
+                </div>
+                <p className="font-body text-[10px] text-muted-foreground italic mb-3 leading-snug">
+                  Week 2 shown; delta compares Week 2 vs Week 1 of the same 14-day window.
+                </p>
                 <div className="space-y-2">
                   {[
-                    { label: "CTR", value: fmtPct(data.avgCTR), benchmark: "0.60%" },
-                    { label: "DPV Rate", value: fmtPct(dpvRate), benchmark: "2.00%" },
-                    { label: "ATC Rate", value: fmtPct(atcRate), benchmark: "15.00%" },
-                    { label: "Purch. Rate", value: fmtPct(purchaseRate), benchmark: "45.00%" },
-                    { label: "NTB %", value: fmtPct(data.avgNTBPercent), benchmark: "80.00%" },
-                    { label: "ROAS", value: `${data.overallROAS.toFixed(2)}x`, benchmark: "10.00x" },
+                    { label: "CTR",         value: fmtPct(W2.ctr),          delta: fmtDeltaPts(W2.ctr, W1.ctr) + " pts" },
+                    { label: "DPV Rate",    value: fmtPct(W2.dpvRate),      delta: fmtDeltaPts(W2.dpvRate, W1.dpvRate) + " pts" },
+                    { label: "ATC Rate",    value: fmtPct(W2.atcRate),      delta: fmtDeltaPts(W2.atcRate, W1.atcRate) + " pts" },
+                    { label: "Purch. Rate", value: fmtPct(W2.purchaseRate), delta: fmtDeltaPts(W2.purchaseRate, W1.purchaseRate) + " pts" },
+                    { label: "NTB %",       value: fmtPct(W2.ntbPercent),   delta: fmtDeltaPts(W2.ntbPercent, W1.ntbPercent) + " pts" },
+                    { label: "ROAS",        value: `${W2.roas.toFixed(2)}x`, delta: fmtDeltaPct(W2.roas, W1.roas) },
                   ].map(m => (
                     <div key={m.label} className="grid grid-cols-[1fr_auto_auto] items-baseline gap-3 pb-1.5 border-b border-border last:border-b-0 last:pb-0">
                       <span className="font-display font-bold text-[11px] uppercase tracking-wide text-muted-foreground">
@@ -599,8 +649,8 @@ const DSPReport = ({ data }: DSPReportProps) => {
                       <span className="font-display font-extrabold text-sm tabular-nums">
                         {m.value}
                       </span>
-                      <span className="font-body text-[10px] text-muted-foreground tabular-nums">
-                        vs {m.benchmark}
+                      <span className={`font-body text-[10px] tabular-nums ${m.delta.startsWith("+") ? "text-emerald-600" : m.delta.startsWith("-") ? "text-red-600" : "text-muted-foreground"}`}>
+                        {m.delta} vs W1
                       </span>
                     </div>
                   ))}
@@ -723,23 +773,29 @@ const DSPReport = ({ data }: DSPReportProps) => {
             </div>
 
             <div className="space-y-3">
-              {/* Factual NTB rollup — numbers only. */}
+              {/* Week 2 NTB values with delta vs Week 1. Numbers only. */}
               <div className="bg-background rounded-xl border border-border p-4">
-                <h4 className="font-display font-extrabold text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-3">
-                  NTB Rollup (Period)
+                <h4 className="font-display font-extrabold text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">
+                  NTB vs Previous Period
                 </h4>
+                <p className="font-body text-[10px] text-muted-foreground italic mb-3 leading-snug">
+                  Week 2 shown; delta vs Week 1 of the reporting window.
+                </p>
                 <div className="space-y-2">
                   {[
-                    { label: "NTB Purchases", value: fmt(data.totalNTBPurchases) },
-                    { label: "NTB Sales", value: fmtCurrency(data.totalNTBSales) },
-                    { label: "NTB %", value: fmtPct(data.avgNTBPercent) },
-                    { label: "NTB CPA", value: `$${ntbCPA.toFixed(2)}` },
-                    { label: "Total Purchases", value: fmt(data.totalPurchases) },
-                    { label: "Existing Sales", value: fmtCurrency(data.totalSales - data.totalNTBSales) },
+                    { label: "NTB Purchases", value: fmt(W2.ntbPurchases),       delta: fmtDeltaPct(W2.ntbPurchases, W1.ntbPurchases) },
+                    { label: "NTB Sales",     value: fmtCurrency(W2.ntbSales),   delta: fmtDeltaPct(W2.ntbSales, W1.ntbSales) },
+                    { label: "NTB %",         value: fmtPct(W2.ntbPercent),      delta: fmtDeltaPts(W2.ntbPercent, W1.ntbPercent) + " pts" },
+                    { label: "NTB CPA",       value: `$${W2.ntbCPA.toFixed(2)}`, delta: fmtDeltaPct(W2.ntbCPA, W1.ntbCPA) },
+                    { label: "Total Purchases", value: fmt(W2.purchases),        delta: fmtDeltaPct(W2.purchases, W1.purchases) },
+                    { label: "Total Sales",     value: fmtCurrency(W2.sales),    delta: fmtDeltaPct(W2.sales, W1.sales) },
                   ].map(m => (
-                    <div key={m.label} className="grid grid-cols-[1fr_auto] items-baseline gap-3 pb-1.5 border-b border-border last:border-b-0 last:pb-0">
+                    <div key={m.label} className="grid grid-cols-[1fr_auto_auto] items-baseline gap-3 pb-1.5 border-b border-border last:border-b-0 last:pb-0">
                       <span className="font-display font-bold text-[11px] uppercase tracking-wide text-muted-foreground">{m.label}</span>
                       <span className="font-display font-extrabold text-sm tabular-nums">{m.value}</span>
+                      <span className={`font-body text-[10px] tabular-nums ${m.delta.startsWith("+") ? "text-emerald-600" : m.delta.startsWith("-") ? "text-red-600" : "text-muted-foreground"}`}>
+                        {m.delta} vs W1
+                      </span>
                     </div>
                   ))}
                 </div>
