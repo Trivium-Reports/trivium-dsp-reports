@@ -115,6 +115,12 @@ const InternalHub = () => {
           </p>
         </div>
 
+        <div className="mb-6 text-xs text-muted-foreground font-body">
+          Each brand has three URLs: <strong className="text-foreground">Full</strong> (mixes visuals + prose, internal reference) ·
+          <strong className="text-foreground"> Visual</strong> (client-send: KPIs, charts, tables — no narrative prose) ·
+          <strong className="text-foreground"> Highlights</strong> (internal bullet baseline — strategists build their own analysis from here).
+        </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {activeClients.map(client => {
             const status = statuses[client.slug];
@@ -135,14 +141,14 @@ const InternalHub = () => {
                 : freshness === "pending"
                 ? "Pending"
                 : "…";
+            const isPending = freshness === "pending";
             return (
-              <Link
+              <div
                 key={client.slug}
-                to={`/${client.slug}`}
-                className="group bg-card border border-border rounded-2xl p-5 hover:border-primary/40 hover:shadow-sm transition-all"
+                className="bg-card border border-border rounded-2xl p-5 hover:border-primary/40 hover:shadow-sm transition-all"
               >
                 <div className="flex items-start justify-between mb-3 gap-3">
-                  <h2 className="font-display font-bold text-lg leading-tight group-hover:text-primary transition-colors">
+                  <h2 className="font-display font-bold text-lg leading-tight">
                     {client.name}
                   </h2>
                   <span
@@ -154,17 +160,54 @@ const InternalHub = () => {
                 <p className="text-xs text-muted-foreground font-mono mb-3">
                   /{client.slug}
                 </p>
+
+                <div className="flex flex-wrap gap-1.5 mb-3">
+                  <Link
+                    to={`/${client.slug}`}
+                    className={`px-2.5 py-1 rounded-md text-[11px] font-display font-bold uppercase tracking-wider transition-colors ${
+                      isPending
+                        ? "bg-slate-100 text-slate-400 pointer-events-none"
+                        : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                    }`}
+                    aria-disabled={isPending}
+                  >
+                    Full
+                  </Link>
+                  <Link
+                    to={`/${client.slug}/visual`}
+                    className={`px-2.5 py-1 rounded-md text-[11px] font-display font-bold uppercase tracking-wider transition-colors ${
+                      isPending
+                        ? "bg-slate-100 text-slate-400 pointer-events-none"
+                        : "bg-primary/10 text-primary hover:bg-primary/20"
+                    }`}
+                    aria-disabled={isPending}
+                  >
+                    Visual (client)
+                  </Link>
+                  <Link
+                    to={`/${client.slug}/highlights`}
+                    className={`px-2.5 py-1 rounded-md text-[11px] font-display font-bold uppercase tracking-wider transition-colors ${
+                      isPending
+                        ? "bg-slate-100 text-slate-400 pointer-events-none"
+                        : "bg-amber-100 text-amber-800 hover:bg-amber-200"
+                    }`}
+                    aria-disabled={isPending}
+                  >
+                    Highlights
+                  </Link>
+                </div>
+
                 {status?.latestDate && (
                   <p className="text-xs text-muted-foreground font-body">
                     Latest: {status.latestDate} · {status.rows} rows
                   </p>
                 )}
-                {status?.freshness === "pending" && (
+                {isPending && (
                   <p className="text-xs text-muted-foreground font-body italic">
                     Awaiting first Amazon report email.
                   </p>
                 )}
-              </Link>
+              </div>
             );
           })}
         </div>

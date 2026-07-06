@@ -11,11 +11,23 @@ import { getClientBySlug } from "@/config/clients";
 
 type AppView = "landing" | "report";
 
-const Index = () => {
+/**
+ * Same page powers /:slug (full dashboard) and /:slug/visual (KPIs +
+ * charts + tables, no interpretive prose). Visual mode is what the
+ * team sends to clients. Narrative wrappers (SoWhatBox, InsightCard,
+ * ActionBox) have data-narrative="true"; index.css hides those under
+ * [data-mode="visual"]. Also auto-advances past the landing hero so
+ * the client hits the report directly.
+ */
+interface IndexProps {
+  mode?: "full" | "visual";
+}
+
+const Index = ({ mode = "full" }: IndexProps) => {
   const { slug } = useParams<{ slug: string }>();
   const client = getClientBySlug(slug);
 
-  const [view, setView] = useState<AppView>("landing");
+  const [view, setView] = useState<AppView>(mode === "visual" ? "report" : "landing");
   const [dspData, setDspData] = useState<DSPSummary | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
 
@@ -57,7 +69,7 @@ const Index = () => {
     : undefined;
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div data-mode={mode} className="min-h-screen bg-background flex flex-col">
       <nav className="sticky top-0 z-50 backdrop-blur-md bg-background/80 border-b border-border print:hidden">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-18 py-4">
           <div className="flex items-center gap-0.5 cursor-pointer" onClick={() => setView("landing")}>
