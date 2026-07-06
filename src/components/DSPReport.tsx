@@ -98,6 +98,7 @@ const AnimIn = ({ children, delay = 0, className = "", direction = "up" }: { chi
 
 const SoWhatBox = ({ children }: { children: React.ReactNode }) => (
   <motion.div
+    data-narrative="true"
     initial={{ opacity: 0, y: 25, scale: 0.97 }}
     whileInView={{ opacity: 1, y: 0, scale: 1 }}
     viewport={{ once: true, margin: "-30px" }}
@@ -114,6 +115,7 @@ const SoWhatBox = ({ children }: { children: React.ReactNode }) => (
 
 const InsightCard = ({ icon: Icon, title, children, bordered = true, delay = 0 }: { icon: any; title: string; children: React.ReactNode; bordered?: boolean; delay?: number }) => (
   <motion.div
+    data-narrative="true"
     initial={{ opacity: 0, x: 20 }}
     whileInView={{ opacity: 1, x: 0 }}
     viewport={{ once: true, margin: "-30px" }}
@@ -132,6 +134,7 @@ const InsightCard = ({ icon: Icon, title, children, bordered = true, delay = 0 }
 
 const ActionBox = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
   <motion.div
+    data-narrative="true"
     initial={{ opacity: 0, y: 20 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: "-30px" }}
