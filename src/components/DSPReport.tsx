@@ -360,7 +360,7 @@ const DSPReport = ({ data }: DSPReportProps) => {
                 </ResponsiveContainer>
 
                 {/* Bottom insight pills */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4">
+                <div data-narrative="true" className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4">
                   <div className="flex items-start gap-2 bg-green-50 border border-green-200 rounded-lg p-3">
                     <CheckCircle2 className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
                     <div>
