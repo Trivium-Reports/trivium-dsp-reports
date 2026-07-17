@@ -351,7 +351,7 @@ const DSPReport = ({ data }: DSPReportProps) => {
                   </AreaChart>
                 </ResponsiveContainer>
 
-                {/* Bottom insight pills */}
+              </div>
             </AnimIn>
           </div>
         </div>
