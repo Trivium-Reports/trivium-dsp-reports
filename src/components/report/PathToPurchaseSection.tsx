@@ -254,38 +254,7 @@ const PathToPurchaseSection = ({ chartData, analysis }: PathToPurchaseSectionPro
         </motion.div>
       )}
 
-      {/* Interpretation Cards */}
-      {insight && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* So What */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="bg-primary/5 border border-primary/20 rounded-2xl p-6"
-          >
-            <div className="flex items-center gap-2 mb-3">
-              <Lightbulb className="w-4 h-4 text-primary" />
-              <span className="font-display font-bold text-xs uppercase tracking-[0.2em] text-primary">What This Means</span>
-            </div>
-            <p className="font-body text-sm text-foreground leading-relaxed">{insight.soWhat}</p>
-          </motion.div>
-
-          {/* Recommended Action */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="bg-card border border-border rounded-2xl p-6 shadow-sm border-l-4 border-l-primary"
-          >
-            <div className="flex items-center gap-2 mb-3">
-              <ArrowRight className="w-4 h-4 text-primary" />
-              <span className="font-display font-bold text-xs uppercase tracking-[0.2em] text-muted-foreground">Recommended Action</span>
-            </div>
-            <p className="font-body text-sm font-medium text-foreground leading-relaxed">{insight.recommendation}</p>
-          </motion.div>
-        </div>
-      )}
+      {/* AI commentary removed */}
     </div>
   );
 };

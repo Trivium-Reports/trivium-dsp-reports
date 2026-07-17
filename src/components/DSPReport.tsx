@@ -96,55 +96,6 @@ const AnimIn = ({ children, delay = 0, className = "", direction = "up" }: { chi
   );
 };
 
-const SoWhatBox = ({ children }: { children: React.ReactNode }) => (
-  <motion.div
-    data-narrative="true"
-    initial={{ opacity: 0, y: 25, scale: 0.97 }}
-    whileInView={{ opacity: 1, y: 0, scale: 1 }}
-    viewport={{ once: true, margin: "-30px" }}
-    transition={{ delay: 0.4, duration: 0.5, ease: "easeOut" }}
-    className="bg-foreground rounded-xl p-5 relative"
-  >
-    <div className="absolute -top-3 -right-3 w-7 h-7 rounded-full bg-primary flex items-center justify-center">
-      <Lightbulb className="w-3.5 h-3.5 text-primary-foreground" />
-    </div>
-    <p className="font-display font-bold text-xs uppercase tracking-[0.15em] text-primary mb-2">So What?</p>
-    <div className="font-body text-sm text-card leading-relaxed">{children}</div>
-  </motion.div>
-);
-
-const InsightCard = ({ icon: Icon, title, children, bordered = true, delay = 0 }: { icon: any; title: string; children: React.ReactNode; bordered?: boolean; delay?: number }) => (
-  <motion.div
-    data-narrative="true"
-    initial={{ opacity: 0, x: 20 }}
-    whileInView={{ opacity: 1, x: 0 }}
-    viewport={{ once: true, margin: "-30px" }}
-    transition={{ delay, duration: 0.45, ease: "easeOut" }}
-    className={`rounded-xl p-4 ${bordered ? "border border-primary/30 bg-card" : "bg-background"}`}
-  >
-    <div className="flex items-center gap-2 mb-2">
-      <div className="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center">
-        <Icon className="w-3.5 h-3.5 text-primary" />
-      </div>
-      <h4 className="font-display font-extrabold text-sm uppercase tracking-wide">{title}</h4>
-    </div>
-    <div className="font-body text-sm text-muted-foreground leading-relaxed">{children}</div>
-  </motion.div>
-);
-
-const ActionBox = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
-  <motion.div
-    data-narrative="true"
-    initial={{ opacity: 0, y: 20 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true, margin: "-30px" }}
-    transition={{ delay: 0.3, duration: 0.5, ease: "easeOut" }}
-    className={`bg-primary/5 border border-primary/20 rounded-xl p-4 ${className}`}
-  >
-    <p className="font-display font-bold text-[10px] uppercase tracking-[0.15em] text-primary mb-1.5">Strategic Action</p>
-    <div className="font-body text-sm text-foreground leading-relaxed font-medium">{children}</div>
-  </motion.div>
-);
 
 const PriorityBadge = ({ level }: { level: "high" | "important" | "monitor" }) => {
   const styles = {
@@ -399,30 +350,6 @@ const DSPReport = ({ data }: DSPReportProps) => {
                 </ResponsiveContainer>
 
                 {/* Bottom insight pills */}
-                <div data-narrative="true" className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4">
-                  <div className="flex items-start gap-2 bg-green-50 border border-green-200 rounded-lg p-3">
-                    <CheckCircle2 className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
-                    <div>
-                      <p className="font-display font-extrabold text-xs uppercase">{fmtPct(data.avgNTBPercent)} NTB @ {data.overallROAS.toFixed(1)}X ROAS</p>
-                      <p className="font-body text-[11px] text-muted-foreground">Net-new demand generation validates DSP scaling</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-2 bg-yellow-50 border border-yellow-200 rounded-lg p-3">
-                    <AlertTriangle className="w-4 h-4 text-yellow-600 mt-0.5 flex-shrink-0" />
-                    <div>
-                      <p className="font-display font-extrabold text-xs uppercase">ROAS {roasTrend >= 0 ? 'Trending Up' : 'Trending Down'}</p>
-                      <p className="font-body text-[11px] text-muted-foreground">{roasTrend >= 0 ? 'Momentum supports current budget allocation' : 'Consider creative refresh or audience optimization'}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-2 bg-blue-50 border border-blue-200 rounded-lg p-3">
-                    <RefreshCw className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
-                    <div>
-                      <p className="font-display font-extrabold text-xs uppercase">Sales Mirror DSP Volume</p>
-                      <p className="font-body text-[11px] text-muted-foreground">Full-funnel synergy sustains conversion momentum</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </AnimIn>
           </div>
         </div>
@@ -485,16 +412,6 @@ const DSPReport = ({ data }: DSPReportProps) => {
                   ))}
                 </div>
               </div>
-
-              <InsightCard icon={TrendingUp} title="Efficiency Trajectory">
-                ROAS {roasTrend >= 0 ? 'improved' : 'declined'} from <strong>{firstHalfROAS.toFixed(2)}x</strong> → <strong>{secondHalfROAS.toFixed(2)}x</strong> across the reporting window. {roasTrend >= 0 ? 'Positive momentum.' : 'Investigate audience fatigue.'}
-              </InsightCard>
-              <InsightCard icon={Activity} title="CTR Signal">
-                Avg CTR of <strong>{fmtPct(data.avgCTR)}</strong> indicates {data.avgCTR > 0.4 ? 'strong creative resonance with target audiences.' : 'room for creative optimization.'}
-              </InsightCard>
-              <SoWhatBox>
-                <strong>ROAS and CTR move independently</strong> — high CTR days don't always produce the best ROAS. Focus on <em>conversion quality</em> over click volume. Optimize creatives for DPV engagement, not just clicks.
-              </SoWhatBox>
             </div>
           </div>
         </div>
@@ -580,10 +497,6 @@ const DSPReport = ({ data }: DSPReportProps) => {
                 </div>
                 <PriorityBadge level="monitor" />
               </div>
-
-              <SoWhatBox>
-                <strong>Don't cut the fuel.</strong> While TOF has lower direct ROAS, it supplies the critical audience pool that mid and bottom funnel convert. <strong>Action:</strong> Evaluate TOF on <em>Reach</em>, not ROAS.
-              </SoWhatBox>
             </div>
           </div>
         </div>
@@ -656,19 +569,6 @@ const DSPReport = ({ data }: DSPReportProps) => {
                   ))}
                 </div>
               </div>
-
-              <InsightCard icon={Sparkles} title="Engagement Multiplier">
-                Converters engage at <strong>2x–3x</strong> the rate of non-converters across DPV, ATC, and impression depth — proving that multi-touch exposure drives action.
-              </InsightCard>
-              <InsightCard icon={Layers} title="Consideration Breadth">
-                High NTB % (<strong>{fmtPct(data.avgNTBPercent)}</strong>) indicates users are actively exploring and comparing before committing — healthy purchase behavior.
-              </InsightCard>
-              <InsightCard icon={AlertTriangle} title="The 'Cold' User Gap">
-                Low-frequency users are under-exposed. They need <strong>higher frequency</strong> to activate — aim for 4-7 impressions before expecting conversion.
-              </InsightCard>
-              <ActionBox>
-                Build sequential retargeting: DPV Viewers → ATC Abandoners → Purchase Converters. Increase frequency on cold users to close the engagement gap.
-              </ActionBox>
             </div>
           </div>
         </div>
@@ -800,16 +700,6 @@ const DSPReport = ({ data }: DSPReportProps) => {
                   ))}
                 </div>
               </div>
-
-              <InsightCard icon={CheckCircle2} title="True Incremental Value">
-                DSP prospecting is successfully acquiring <strong>{fmt(data.totalNTBPurchases)}</strong> customers who are new to brand, generating <strong>{fmtCurrency(data.totalNTBSales)}</strong> in incremental revenue.
-              </InsightCard>
-              <InsightCard icon={Users} title="Cold Acquisition Success">
-                {fmtPct(data.avgNTBPercent)} NTB rate confirms the campaign is acquiring customers <strong>completely new to the brand</strong>, not just retargeting warm pools.
-              </InsightCard>
-              <ActionBox>
-                Identify which audience segments drive the highest NTB purchase efficiency and <strong>scale budget by 20%</strong> to feed mid-funnel retargeting pools.
-              </ActionBox>
             </div>
           </div>
         </div>
@@ -877,16 +767,6 @@ const DSPReport = ({ data }: DSPReportProps) => {
                   </div>
                 </div>
               </div>
-
-              <InsightCard icon={ArrowUpRight} title="Best Day">
-                <strong>{bestDow.day}</strong> delivers the highest avg ROAS at <strong>{bestDow.avgROAS.toFixed(2)}x</strong> with <strong>${bestDow.avgSales.toFixed(0)}</strong> avg daily sales. Strongest efficiency window.
-              </InsightCard>
-              <InsightCard icon={ArrowDownRight} title="Weakest Day">
-                <strong>{worstDow.day}</strong> shows the lowest ROAS at <strong>{worstDow.avgROAS.toFixed(2)}x</strong>. Consider reducing budget allocation or adjusting bids on this day.
-              </InsightCard>
-              <SoWhatBox>
-                <strong>Dayparting opportunity:</strong> Shift budget toward {bestDow.day} and away from {worstDow.day}. A 15% budget rebalance could improve overall ROAS by 0.3-0.5x without increasing total spend.
-              </SoWhatBox>
             </div>
           </div>
         </div>
@@ -936,15 +816,6 @@ const DSPReport = ({ data }: DSPReportProps) => {
             </div>
 
             <div className="space-y-3">
-              <InsightCard icon={Award} title="Peak Performance">
-                <strong>{shortDate(bestDay.date)}</strong> generated <strong>${bestDay.sales.toFixed(0)}</strong> at <strong>{(bestDay.sales / bestDay.spend).toFixed(2)}x ROAS</strong> — the strongest single-day return.
-              </InsightCard>
-              <InsightCard icon={ArrowDownRight} title="Efficiency Floor">
-                <strong>{shortDate(worstDay.date)}</strong> had the lowest sales at <strong>${worstDay.sales.toFixed(0)}</strong>. Examine budget pacing and creative rotation.
-              </InsightCard>
-              <SoWhatBox>
-                At <strong>{data.overallROAS.toFixed(2)}x ROAS</strong> on <strong>{fmtCurrency(data.totalSpend)}</strong> spend, the campaign is {data.overallROAS > 7 ? <><strong>performing well above DSP benchmarks</strong> (3-5x). Strong signal to maintain or <em>scale</em> budget.</> : 'within typical DSP ranges. Focus on audience and creative optimization.'}
-              </SoWhatBox>
             </div>
           </div>
         </div>
@@ -988,12 +859,6 @@ const DSPReport = ({ data }: DSPReportProps) => {
                 <p className="font-display font-extrabold text-3xl text-primary">{fmtCurrency(data.totalSales - data.totalSpend)}</p>
                 <p className="font-body text-xs text-muted-foreground mt-1">Sales minus ad spend</p>
               </div>
-              <InsightCard icon={TrendingUp} title="Revenue Acceleration">
-                Sales curve <strong>outpaces</strong> spend curve consistently, confirming positive ROI across the entire reporting window. The gap widened in the second half — {roasTrend >= 0 ? 'momentum is building.' : 'consider sustaining current strategy.'}
-              </InsightCard>
-              <SoWhatBox>
-                Cumulative ROAS finished at <strong>{(cumSales / cumSpend).toFixed(2)}x</strong>. Every dollar spent returned <strong>${(cumSales / cumSpend).toFixed(2)}</strong> in revenue. Reinvest a portion of net revenue into audience expansion.
-              </SoWhatBox>
             </div>
           </div>
         </div>

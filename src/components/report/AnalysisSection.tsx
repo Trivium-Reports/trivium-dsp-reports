@@ -54,26 +54,7 @@ const AnalysisSection = ({ analysis }: AnalysisSectionProps) => {
             ))}
           </div>
 
-          {/* So What */}
-          <div className="ml-[52px] bg-muted/50 rounded-xl p-5 mb-5">
-            <div className="flex items-center gap-2 mb-2">
-              <Lightbulb className="w-4 h-4 text-primary" />
-              <p className="font-display font-bold text-xs uppercase tracking-widest text-primary">
-                So What?
-              </p>
-            </div>
-            <p className="font-body text-sm text-foreground leading-relaxed">
-              {insight.soWhat}
-            </p>
-          </div>
-
-          {/* Recommendation */}
-          <div className="ml-[52px] flex items-start gap-2">
-            <ArrowRight className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
-            <p className="font-body text-sm font-medium text-foreground leading-relaxed">
-              {insight.recommendation}
-            </p>
-          </div>
+          {/* AI commentary removed */}
         </motion.div>
       ))}
     </div>

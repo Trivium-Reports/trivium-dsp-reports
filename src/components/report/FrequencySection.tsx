@@ -149,7 +149,6 @@ const FrequencySection = ({ chartData, analysis }: FrequencySectionProps) => {
               <Lightbulb className="w-4 h-4 text-primary" />
               <span className="font-display font-bold text-xs uppercase tracking-[0.2em] text-primary">What This Means</span>
             </div>
-            <p className="font-body text-sm text-foreground leading-relaxed">{insight.soWhat}</p>
           </motion.div>
 
           <motion.div
@@ -162,7 +161,6 @@ const FrequencySection = ({ chartData, analysis }: FrequencySectionProps) => {
               <ArrowRight className="w-4 h-4 text-primary" />
               <span className="font-display font-bold text-xs uppercase tracking-[0.2em] text-muted-foreground">Recommended Action</span>
             </div>
-            <p className="font-body text-sm font-medium text-foreground leading-relaxed">{insight.recommendation}</p>
           </motion.div>
         </div>
       )}
