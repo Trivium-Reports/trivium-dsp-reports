@@ -89,23 +89,81 @@
   }
 }
 
-/* Print / PDF Export Styles */
 /* ── Mobile optimisation ── */
 @media (max-width: 640px) {
-  h1 { font-size: 1.5rem !important; }
-  h2 { font-size: 1.125rem !important; }
+  /* Page container */
+  .max-w-6xl { padding-left: 0.75rem !important; padding-right: 0.75rem !important; }
+
+  /* Nav bar */
+  nav .max-w-6xl { padding-left: 0.5rem !important; padding-right: 0.5rem !important; }
+  nav .font-display.text-xs { font-size: 0.6rem !important; letter-spacing: 0.05em !important; }
+  nav img { height: 1.75rem !important; }
+  nav .text-xl { font-size: 0.875rem !important; }
+
+  /* Headings */
+  h1 { font-size: 1.25rem !important; }
+  h2 { font-size: 1rem !important; }
+  h3 { font-size: 0.875rem !important; }
+
   /* Slide padding */
-  .p-6 { padding: 1rem !important; }
-  .p-8 { padding: 1.25rem !important; }
-  /* KPI cards */
-  .text-3xl { font-size: 1.5rem !important; }
-  .text-2xl { font-size: 1.25rem !important; }
-  /* Recharts responsive container — prevent overflow */
-  .recharts-responsive-container { min-height: 180px; }
-  /* Table scroll */
-  table { font-size: 0.75rem; }
-  /* Hide breadcrumbs / copy buttons on small screens */
-  [class*="tracking-wider"] button { display: none; }
+  .p-6, .md\:p-8 { padding: 0.75rem !important; }
+  .p-5 { padding: 0.75rem !important; }
+
+  /* KPI card values — smaller on mobile */
+  .text-3xl { font-size: 1.25rem !important; }
+  .text-2xl { font-size: 1.125rem !important; }
+  .text-xl { font-size: 1rem !important; }
+  .text-lg { font-size: 0.875rem !important; }
+
+  /* Hide breadcrumb navigation on mobile — it overlaps the title */
+  .dsp-breadcrumb { display: none !important; }
+
+  /* Comparison panel grids — stack the columns */
+  [class*="grid-cols-[1fr_minmax"] {
+    grid-template-columns: 1fr auto auto auto !important;
+    gap: 0.25rem 0.5rem !important;
+    font-size: 0.75rem !important;
+  }
+  [class*="grid-cols-[1fr_minmax"] span { font-size: 0.625rem !important; }
+
+  /* Chart containers — reduce height */
+  .recharts-responsive-container { min-height: 160px !important; max-height: 220px !important; }
+  .recharts-wrapper { font-size: 10px !important; }
+
+  /* Legend text */
+  .recharts-legend-item-text { font-size: 10px !important; }
+
+  /* Tables — horizontal scroll */
+  .overflow-x-auto { -webkit-overflow-scrolling: touch; }
+  table { font-size: 0.65rem !important; white-space: nowrap; }
+  th, td { padding: 0.35rem 0.5rem !important; }
+
+  /* Grid gaps — tighter on mobile */
+  .gap-6 { gap: 0.75rem !important; }
+  .gap-5 { gap: 0.75rem !important; }
+  .space-y-8 > * + * { margin-top: 1rem !important; }
+
+  /* Three-col grids (like funnel, DOW) — stack */
+  .grid-cols-3 { grid-template-columns: 1fr !important; }
+
+  /* Funnel visualization — compact */
+  .rounded-xl.border.border-border.p-4 { padding: 0.5rem !important; }
+
+  /* KPI card icon circles — smaller */
+  .w-8.h-8 { width: 1.5rem !important; height: 1.5rem !important; }
+  .w-8.h-8 svg { width: 0.75rem !important; height: 0.75rem !important; }
+
+  /* Tracking text labels */
+  [class*="tracking-[0.2em]"] { font-size: 0.55rem !important; letter-spacing: 0.1em !important; }
+
+  /* Section slide footer */
+  .bg-primary .font-display { font-size: 0.55rem !important; }
+
+  /* Chart legend row — wrap */
+  .flex.items-center.gap-4.text-xs { flex-wrap: wrap; gap: 0.25rem !important; font-size: 0.6rem !important; }
+
+  /* Health score circle — smaller */
+  svg[viewBox="0 0 200 200"] { max-width: 140px !important; max-height: 140px !important; }
 }
 
 @media print {

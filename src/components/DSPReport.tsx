@@ -39,7 +39,7 @@ const Breadcrumb = ({ active }: { active: "discovery" | "analysis" | "insight" |
     { key: "action", icon: Zap, label: "Action" },
   ] as const;
   return (
-    <div className="flex items-center gap-1">
+    <div className="dsp-breadcrumb flex items-center gap-1">
       {steps.map((s, i) => (
         <div key={s.key} className="flex items-center gap-1">
           {i > 0 && <span className="text-border mx-0.5">—</span>}
