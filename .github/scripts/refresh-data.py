@@ -160,10 +160,10 @@ def aggregate_dsp(raw_csv):
         by_date[d]["total_sales"]         += _first_present(r, *TOTAL_SALES_KEYS)
         by_date[d]["total_ntb_sales"]     += _first_present(r, *TOTAL_NTB_SALES_KEYS)
 
-    # Amazon sends "Previous 30 days" — trim to the most recent 14 for the
-    # rolling 2-week dashboard window. Fewer than 14 → keep what we have.
+    # Amazon sends "Previous 30 days" — keep the most recent 28 days so the
+    # dashboard can compare the current 14-day period vs the prior 14-day period.
     all_dates = sorted(by_date.keys(), key=lambda d: datetime.strptime(d, "%b %d, %Y"))
-    dates = all_dates[-14:]
+    dates = all_dates[-28:]
 
     HEADER = [
         "Date", "Advertiser account name", "Advertiser account ID",
