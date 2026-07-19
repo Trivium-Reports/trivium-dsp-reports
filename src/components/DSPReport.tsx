@@ -316,11 +316,11 @@ const DSPReport = ({ data }: DSPReportProps) => {
           <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6">
             {/* Left: KPI Stack */}
             <div className="space-y-3">
-              <AnimIn delay={0.1} direction="left"><KPICardLarge label="Ad Spend" value={fmtCurrency(data.totalSpend)} subtitle={`${fmtCurrency(data.avgDailySpend)}/day avg`} icon={DollarSign} /></AnimIn>
-              <AnimIn delay={0.2} direction="left"><KPICardLarge label="Total Sales" value={fmtCurrency(data.totalSales)} subtitle={`${data.rows.length}-day period`} icon={TrendingUp} trend={`↗`} /></AnimIn>
-              <AnimIn delay={0.3} direction="left"><KPICardLarge label="Total ROAS" value={`${data.overallROAS.toFixed(1)}`} subtitle="Return on ad spend" icon={Award} /></AnimIn>
-              <AnimIn delay={0.4} direction="left"><KPICardLarge label="% New-to-Brand" value={`${data.avgNTBPercent.toFixed(0)}%`} subtitle={`${fmt(data.totalNTBPurchases)} NTB purchases`} icon={Users} /></AnimIn>
-              <AnimIn delay={0.5} direction="left"><KPICardLarge label="Avg CTR" value={fmtPct(data.avgCTR)} subtitle="Click-through rate" icon={MousePointerClick} /></AnimIn>
+              <AnimIn delay={0.1} direction="left"><KPICardLarge label="Ad Spend" value={fmtCurrency(data.totalSpend)} subtitle={`${fmtCurrency(W1.spend)} prior · ${fmtDeltaPct(W2.spend, W1.spend)} WoW`} icon={DollarSign} trend={fmtDeltaPct(W2.spend, W1.spend)} /></AnimIn>
+              <AnimIn delay={0.2} direction="left"><KPICardLarge label="Total Sales" value={fmtCurrency(data.totalSales)} subtitle={`${fmtCurrency(W1.sales)} prior · ${fmtDeltaPct(W2.sales, W1.sales)} WoW`} icon={TrendingUp} trend={fmtDeltaPct(W2.sales, W1.sales)} /></AnimIn>
+              <AnimIn delay={0.3} direction="left"><KPICardLarge label="Total ROAS" value={`${data.overallROAS.toFixed(1)}`} subtitle={`${W1.roas.toFixed(2)}x prior · ${fmtDeltaPct(W2.roas, W1.roas)} WoW`} icon={Award} trend={fmtDeltaPct(W2.roas, W1.roas)} /></AnimIn>
+              <AnimIn delay={0.4} direction="left"><KPICardLarge label="% New-to-Brand" value={`${data.avgNTBPercent.toFixed(0)}%`} subtitle={`${W1.ntbPercent.toFixed(0)}% prior · ${fmtDeltaPct(W2.ntbPercent, W1.ntbPercent)} WoW`} icon={Users} trend={fmtDeltaPct(W2.ntbPercent, W1.ntbPercent)} /></AnimIn>
+              <AnimIn delay={0.5} direction="left"><KPICardLarge label="Avg CTR" value={fmtPct(data.avgCTR)} subtitle={`${fmtPct(W1.ctr)} prior · ${fmtDeltaPct(W2.ctr, W1.ctr)} WoW`} icon={MousePointerClick} trend={fmtDeltaPct(W2.ctr, W1.ctr)} /></AnimIn>
             </div>
 
             {/* Right: Performance Trend Chart */}
@@ -350,7 +350,7 @@ const DSPReport = ({ data }: DSPReportProps) => {
                     <YAxis yAxisId="spend" orientation="right" tick={{ fontSize: 11, fill: 'hsl(0,0%,40%)' }} tickFormatter={(v) => `$${v.toFixed(0)}`} />
                     <Tooltip contentStyle={TOOLTIP_STYLE} formatter={(value: number) => `$${value.toFixed(2)}`} />
                     <Area yAxisId="sales" type="monotone" dataKey="sales" stroke={COLORS.primary} fill="url(#salesGradExec)" strokeWidth={3} name="Sales" animationDuration={1800} animationEasing="ease-in-out" />
-                    <Line yAxisId="spend" type="monotone" dataKey="spend" stroke="hsl(0,0%,65%)" strokeWidth={2} strokeDasharray="6 4" dot={false} name="Spend" animationDuration={2200} animationEasing="ease-in-out" />
+                    <Line yAxisId="spend" type="monotone" dataKey="spend" stroke="hsl(0,0%,40%)" strokeWidth={2.5} strokeDasharray="6 4" dot={{ fill: 'hsl(0,0%,40%)', r: 2 }} name="Spend" animationDuration={2200} animationEasing="ease-in-out" />
                   </AreaChart>
                 </ResponsiveContainer>
 
@@ -402,7 +402,7 @@ const DSPReport = ({ data }: DSPReportProps) => {
                 <div className="space-y-1">
                   {[
                     { label: "ROAS",   w1: `${W1.roas.toFixed(2)}x`, w2: `${W2.roas.toFixed(2)}x`, delta: fmtDeltaPct(W2.roas, W1.roas) },
-                    { label: "CTR",    w1: fmtPct(W1.ctr),           w2: fmtPct(W2.ctr),            delta: fmtDeltaPts(W2.ctr, W1.ctr) + " pts" },
+                    { label: "CTR",    w1: fmtPct(W1.ctr),           w2: fmtPct(W2.ctr),            delta: fmtDeltaPct(W2.ctr, W1.ctr) },
                     { label: "Sales",  w1: fmtCurrency(W1.sales),    w2: fmtCurrency(W2.sales),     delta: fmtDeltaPct(W2.sales, W1.sales) },
                     { label: "Spend",  w1: fmtCurrency(W1.spend),    w2: fmtCurrency(W2.spend),     delta: fmtDeltaPct(W2.spend, W1.spend) },
                     { label: "Impr.",   w1: fmt(W1.impressions),      w2: fmt(W2.impressions),       delta: fmtDeltaPct(W2.impressions, W1.impressions) },
@@ -438,7 +438,8 @@ const DSPReport = ({ data }: DSPReportProps) => {
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6">
             <div className="space-y-4">
               <div className="bg-background rounded-xl border border-border p-5">
-                <h3 className="font-display font-extrabold text-sm uppercase tracking-wide text-muted-foreground mb-4">Conversion Funnel Flow</h3>
+                <h3 className="font-display font-extrabold text-sm uppercase tracking-wide text-muted-foreground mb-1">Conversion Funnel Flow</h3>
+                <p className="font-body text-xs text-muted-foreground mb-4">How DSP ad impressions convert through the purchase journey: views → product page visits (DPV) → add to cart (ATC) → purchases.</p>
                 <ResponsiveContainer width="100%" height={260}>
                   <BarChart data={funnelData} layout="vertical">
                     <CartesianGrid strokeDasharray="3 3" stroke="hsl(36, 20%, 88%)" />
@@ -460,16 +461,19 @@ const DSPReport = ({ data }: DSPReportProps) => {
                   <p className="font-display font-bold text-[9px] uppercase tracking-[0.15em] text-muted-foreground">Impr → DPV</p>
                   <p className="font-display font-extrabold text-2xl text-primary">{fmtPct(dpvRate)}</p>
                   <p className="font-body text-[10px] text-muted-foreground">DPV Rate</p>
+                  <p className={`font-display font-bold text-[10px] mt-1 ${W2.dpvRate >= W1.dpvRate ? 'text-emerald-600' : 'text-red-600'}`}>{fmtDeltaPct(W2.dpvRate, W1.dpvRate)} WoW</p>
                 </div>
                 <div className="bg-background rounded-xl border border-border p-4 text-center">
                   <p className="font-display font-bold text-[9px] uppercase tracking-[0.15em] text-muted-foreground">DPV → ATC</p>
                   <p className="font-display font-extrabold text-2xl text-primary">{fmtPct(atcRate)}</p>
                   <p className="font-body text-[10px] text-muted-foreground">ATC Rate</p>
+                  <p className={`font-display font-bold text-[10px] mt-1 ${W2.atcRate >= W1.atcRate ? 'text-emerald-600' : 'text-red-600'}`}>{fmtDeltaPct(W2.atcRate, W1.atcRate)} WoW</p>
                 </div>
                 <div className="bg-background rounded-xl border border-border p-4 text-center">
                   <p className="font-display font-bold text-[9px] uppercase tracking-[0.15em] text-muted-foreground">ATC → Purchase</p>
                   <p className="font-display font-extrabold text-2xl text-primary">{fmtPct(purchaseRate)}</p>
                   <p className="font-body text-[10px] text-muted-foreground">Close Rate</p>
+                  <p className={`font-display font-bold text-[10px] mt-1 ${W2.purchaseRate >= W1.purchaseRate ? 'text-emerald-600' : 'text-red-600'}`}>{fmtDeltaPct(W2.purchaseRate, W1.purchaseRate)} WoW</p>
                 </div>
               </div>
             </div>
@@ -553,11 +557,11 @@ const DSPReport = ({ data }: DSPReportProps) => {
                 </div>
                 <div className="space-y-1">
                   {[
-                    { label: "CTR",         w1: fmtPct(W1.ctr),          w2: fmtPct(W2.ctr),          delta: fmtDeltaPts(W2.ctr, W1.ctr) + " pts" },
-                    { label: "DPV Rate",    w1: fmtPct(W1.dpvRate),      w2: fmtPct(W2.dpvRate),      delta: fmtDeltaPts(W2.dpvRate, W1.dpvRate) + " pts" },
-                    { label: "ATC Rate",    w1: fmtPct(W1.atcRate),      w2: fmtPct(W2.atcRate),      delta: fmtDeltaPts(W2.atcRate, W1.atcRate) + " pts" },
-                    { label: "Purch. Rate", w1: fmtPct(W1.purchaseRate), w2: fmtPct(W2.purchaseRate), delta: fmtDeltaPts(W2.purchaseRate, W1.purchaseRate) + " pts" },
-                    { label: "NTB %",       w1: fmtPct(W1.ntbPercent),   w2: fmtPct(W2.ntbPercent),   delta: fmtDeltaPts(W2.ntbPercent, W1.ntbPercent) + " pts" },
+                    { label: "CTR",         w1: fmtPct(W1.ctr),          w2: fmtPct(W2.ctr),          delta: fmtDeltaPct(W2.ctr, W1.ctr) },
+                    { label: "DPV Rate",    w1: fmtPct(W1.dpvRate),      w2: fmtPct(W2.dpvRate),      delta: fmtDeltaPct(W2.dpvRate, W1.dpvRate) },
+                    { label: "ATC Rate",    w1: fmtPct(W1.atcRate),      w2: fmtPct(W2.atcRate),      delta: fmtDeltaPct(W2.atcRate, W1.atcRate) },
+                    { label: "Purch. Rate", w1: fmtPct(W1.purchaseRate), w2: fmtPct(W2.purchaseRate), delta: fmtDeltaPct(W2.purchaseRate, W1.purchaseRate) },
+                    { label: "NTB %",       w1: fmtPct(W1.ntbPercent),   w2: fmtPct(W2.ntbPercent),   delta: fmtDeltaPct(W2.ntbPercent, W1.ntbPercent) },
                     { label: "ROAS",        w1: `${W1.roas.toFixed(2)}x`, w2: `${W2.roas.toFixed(2)}x`, delta: fmtDeltaPct(W2.roas, W1.roas) },
                   ].map(m => (
                     <div key={m.label} className="grid grid-cols-[1fr_minmax(60px,auto)_minmax(60px,auto)_50px] gap-x-4 items-baseline py-1 border-b border-border/50 last:border-b-0">
