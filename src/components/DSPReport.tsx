@@ -693,7 +693,7 @@ const DSPReport = ({ data }: DSPReportProps) => {
                   {[
                     { label: "NTB Purch.", w1: fmt(W1.ntbPurchases),       w2: fmt(W2.ntbPurchases),       delta: fmtDeltaPct(W2.ntbPurchases, W1.ntbPurchases) },
                     { label: "NTB Sales",  w1: fmtCurrency(W1.ntbSales),   w2: fmtCurrency(W2.ntbSales),   delta: fmtDeltaPct(W2.ntbSales, W1.ntbSales) },
-                    { label: "NTB %",      w1: fmtPct(W1.ntbPercent),      w2: fmtPct(W2.ntbPercent),      delta: fmtDeltaPts(W2.ntbPercent, W1.ntbPercent) + " pts" },
+                    { label: "NTB %",      w1: fmtPct(W1.ntbPercent),      w2: fmtPct(W2.ntbPercent),      delta: fmtDeltaPct(W2.ntbPercent, W1.ntbPercent) },
                     { label: "NTB CPA",    w1: `$${W1.ntbCPA.toFixed(2)}`, w2: `$${W2.ntbCPA.toFixed(2)}`, delta: fmtDeltaPct(W2.ntbCPA, W1.ntbCPA) },
                     { label: "Tot. Purch.", w1: fmt(W1.purchases),         w2: fmt(W2.purchases),          delta: fmtDeltaPct(W2.purchases, W1.purchases) },
                     { label: "Tot. Sales",  w1: fmtCurrency(W1.sales),     w2: fmtCurrency(W2.sales),      delta: fmtDeltaPct(W2.sales, W1.sales) },

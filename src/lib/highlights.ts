@@ -124,7 +124,7 @@ export function generateHighlights(summary: DSPSummary): Highlights {
     const ntbPctDelta = w2.ntbPercent - w1.ntbPercent; // percentage-point
     bullets.push({
       takeaway: `NTB acquisition ${ntbDelta > 0 ? "surged" : ntbDelta < 0 ? "softened" : "held flat"} — ${fmtCount(w2.ntbPurchases)} net-new buyers in Week 2 vs. ${fmtCount(w1.ntbPurchases)} in Week 1 (${ntbDelta >= 0 ? "+" : ""}${ntbDelta.toFixed(1)}%).`,
-      body: `NTB share of purchases moved ${w1.ntbPercent.toFixed(1)}% → ${w2.ntbPercent.toFixed(1)}% (${ntbPctDelta >= 0 ? "+" : ""}${ntbPctDelta.toFixed(1)} pts). NTB sales: ${fmtUsd(w2.ntbSales)} in Week 2 vs. ${fmtUsd(w1.ntbSales)} in Week 1.`,
+      body: `NTB share of purchases moved ${w1.ntbPercent.toFixed(1)}% → ${w2.ntbPercent.toFixed(1)}% (${ntbPctDelta >= 0 ? "+" : ""}${ntbPctDelta.toFixed(1)}%). NTB sales: ${fmtUsd(w2.ntbSales)} in Week 2 vs. ${fmtUsd(w1.ntbSales)} in Week 1.`,
       implication:
         w2.ntbPercent >= 40
           ? "DSP is functioning strongly as a prospecting engine — worth funding new-customer creative next cycle."
@@ -137,7 +137,7 @@ export function generateHighlights(summary: DSPSummary): Highlights {
     const ctrDelta = w2.ctr - w1.ctr;
     const impDelta = pctDelta(w2.impressions, w1.impressions);
     bullets.push({
-      takeaway: `Engagement quality ${ctrDelta > 0.02 ? "improved" : ctrDelta < -0.02 ? "weakened" : "held steady"} — CTR ${w1.ctr.toFixed(2)}% → ${w2.ctr.toFixed(2)}% (${ctrDelta >= 0 ? "+" : ""}${ctrDelta.toFixed(2)} pts).`,
+      takeaway: `Engagement quality ${ctrDelta > 0.02 ? "improved" : ctrDelta < -0.02 ? "weakened" : "held steady"} — CTR ${w1.ctr.toFixed(2)}% → ${w2.ctr.toFixed(2)}% (${ctrDelta >= 0 ? "+" : ""}${ctrDelta.toFixed(2)}%).`,
       body: `Impressions ${impDelta >= 0 ? "up" : "down"} ${Math.abs(impDelta).toFixed(1)}% (${fmtCount(w1.impressions)} → ${fmtCount(w2.impressions)}).`,
       implication:
         ctrDelta > 0.05
