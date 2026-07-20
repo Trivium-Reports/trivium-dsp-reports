@@ -347,10 +347,10 @@ const DSPReport = ({ data }: DSPReportProps) => {
                     <CartesianGrid strokeDasharray="3 3" stroke="hsl(36, 20%, 88%)" />
                     <XAxis dataKey="date" tick={{ fontSize: 11, fill: 'hsl(0,0%,40%)' }} />
                     <YAxis yAxisId="sales" tick={{ fontSize: 11, fill: 'hsl(0,0%,40%)' }} tickFormatter={(v) => `$${(v / 1000).toFixed(1)}K`} />
-                    <YAxis yAxisId="spend" orientation="right" tick={{ fontSize: 11, fill: 'hsl(0,0%,40%)' }} tickFormatter={(v) => `$${v.toFixed(0)}`} />
+                    <YAxis yAxisId="spend" orientation="right" tick={{ fontSize: 11, fill: 'hsl(220,60%,35%)' }} tickFormatter={(v) => `$${(v / 1000).toFixed(1)}K`} />
                     <Tooltip contentStyle={TOOLTIP_STYLE} formatter={(value: number) => `$${value.toFixed(2)}`} />
-                    <Area yAxisId="sales" type="monotone" dataKey="sales" stroke={COLORS.primary} fill="url(#salesGradExec)" strokeWidth={3} name="Sales" animationDuration={1800} animationEasing="ease-in-out" />
-                    <Line yAxisId="spend" type="monotone" dataKey="spend" stroke="hsl(0,0%,40%)" strokeWidth={2.5} strokeDasharray="6 4" dot={{ fill: 'hsl(0,0%,40%)', r: 2 }} name="Spend" animationDuration={2200} animationEasing="ease-in-out" />
+                    <Area yAxisId="sales" type="monotone" dataKey="sales" stroke={COLORS.primary} fill="url(#salesGradExec)" strokeWidth={3} name="Sales ($)" animationDuration={1800} animationEasing="ease-in-out" />
+                    <Line yAxisId="spend" type="monotone" dataKey="spend" stroke="hsl(220,60%,35%)" strokeWidth={3} dot={{ fill: 'hsl(220,60%,35%)', r: 3, strokeWidth: 1, stroke: '#fff' }} name="Spend ($)" animationDuration={2200} animationEasing="ease-in-out" />
                   </AreaChart>
                 </ResponsiveContainer>
 
