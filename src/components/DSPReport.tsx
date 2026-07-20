@@ -337,7 +337,7 @@ const DSPReport = ({ data }: DSPReportProps) => {
                   </div>
                 </div>
                 <ResponsiveContainer width="100%" height={300}>
-                  <AreaChart data={chartData}>
+                  <ComposedChart data={chartData}>
                     <defs>
                       <linearGradient id="salesGradExec" x1="0" y1="0" x2="0" y2="1">
                         <stop offset="5%" stopColor={COLORS.primary} stopOpacity={0.25} />
@@ -349,9 +349,10 @@ const DSPReport = ({ data }: DSPReportProps) => {
                     <YAxis yAxisId="sales" tick={{ fontSize: 11, fill: 'hsl(0,0%,40%)' }} tickFormatter={(v) => `$${(v / 1000).toFixed(1)}K`} />
                     <YAxis yAxisId="spend" orientation="right" tick={{ fontSize: 11, fill: 'hsl(220,60%,35%)' }} tickFormatter={(v) => `$${(v / 1000).toFixed(1)}K`} />
                     <Tooltip contentStyle={TOOLTIP_STYLE} formatter={(value: number) => `$${value.toFixed(2)}`} />
+                    <Legend />
                     <Area yAxisId="sales" type="monotone" dataKey="sales" stroke={COLORS.primary} fill="url(#salesGradExec)" strokeWidth={3} name="Sales ($)" animationDuration={1800} animationEasing="ease-in-out" />
                     <Line yAxisId="spend" type="monotone" dataKey="spend" stroke="hsl(220,60%,35%)" strokeWidth={3} dot={{ fill: 'hsl(220,60%,35%)', r: 3, strokeWidth: 1, stroke: '#fff' }} name="Spend ($)" animationDuration={2200} animationEasing="ease-in-out" />
-                  </AreaChart>
+                  </ComposedChart>
                 </ResponsiveContainer>
 
               </div>
