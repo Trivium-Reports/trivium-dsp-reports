@@ -199,9 +199,15 @@ def to_csv_text(filename, blob):
 
 # ── Matching ─────────────────────────────────────────────────
 
+# Accept both report families: the Sponsored Ads console calls it a "Conversion
+# path(s)" report, the DSP console calls it "Path to conversion". The DSP one is
+# the automatable route (its emails carry public pre-signed S3 links).
+REPORT_PHRASES = ("conversion path", "path to conversion")
+
+
 def match_brand(subject):
     subj = subject.lower()
-    if "conversion path" not in subj:
+    if not any(phrase in subj for phrase in REPORT_PHRASES):
         return None
     for brand in sorted(BRANDS, key=lambda b: -len(b["name"])):
         if brand["name"].lower() in subj:
@@ -244,7 +250,7 @@ def main():
     # Broad query on purpose: Amazon's subject wording varies ("Conversion path
     # report" vs "Conversion Paths Report"), and Gmail tokenises so a quoted
     # "conversion path" misses the plural. Filter precisely in match_brand().
-    query = f'subject:conversion newer_than:{LOOKBACK_DAYS}d'
+    query = f'subject:(conversion OR path) newer_than:{LOOKBACK_DAYS}d'
     listing = gmail("/messages", token, {"q": query, "maxResults": 100})
     messages = listing.get("messages", [])
     print(f"→ Gmail query: {query}")
