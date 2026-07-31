@@ -207,7 +207,7 @@ const ConversionPathSection = ({ slug, num = "09" }: Props) => {
           <table className="w-full min-w-[520px] border-collapse">
             <thead>
               <tr className="border-b border-border">
-                {["Path Type", "% Sales", "Sales", "Purchases", "Avg Touchpoints", "NTB %"].map((h, i) => (
+                {["Path Type", "% Sales", "Sales", "Purchases", "Avg Impressions", "NTB %"].map((h, i) => (
                   <th
                     key={h}
                     className={`font-display font-bold text-[10px] uppercase tracking-widest text-muted-foreground pb-3 ${
@@ -249,7 +249,7 @@ const ConversionPathSection = ({ slug, num = "09" }: Props) => {
                     {int(g.purchases)}
                   </td>
                   <td className="py-3 pl-3 text-right font-body font-semibold text-[13px] tabular-nums">
-                    {g.avgTouches.toFixed(1)}
+                    {g.avgImpressions.toFixed(1)}
                   </td>
                   <td className="py-3 pl-3 text-right font-body font-semibold text-[13px] tabular-nums">
                     {pct(g.ntbSharePct)}

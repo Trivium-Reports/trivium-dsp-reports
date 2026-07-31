@@ -14,8 +14,8 @@
  * computed and must never be displayed.
  *
  * Rows are grouped into four path types by which ad families appear:
- *   DSP + Sponsored Ads · Amazon DSP only · Sponsored Ads, multi-touch ·
- *   Sponsored Ads, single touch
+ *   DSP + Sponsored Ads · Amazon DSP only · Sponsored Ads, multi-format ·
+ *   Sponsored Ads, single format
  */
 
 /* ── Column groups ─────────────────────────────────────────── */
@@ -40,23 +40,23 @@ const SA_COLS = [
 export type PathType =
   | "DSP + Sponsored Ads"
   | "Amazon DSP only"
-  | "Sponsored Ads, multi-touch"
-  | "Sponsored Ads, single touch";
+  | "Sponsored Ads, multi-format"
+  | "Sponsored Ads, single format";
 
 /** Display order — also the donut order. */
 export const PATH_TYPE_ORDER: PathType[] = [
   "DSP + Sponsored Ads",
   "Amazon DSP only",
-  "Sponsored Ads, multi-touch",
-  "Sponsored Ads, single touch",
+  "Sponsored Ads, multi-format",
+  "Sponsored Ads, single format",
 ];
 
 /** hsl() strings so the donut stays inside the report's palette. */
 export const PATH_TYPE_COLORS: Record<PathType, string> = {
   "DSP + Sponsored Ads": "hsl(25, 100%, 50%)",
   "Amazon DSP only": "hsl(213, 51%, 25%)",
-  "Sponsored Ads, multi-touch": "hsl(36, 78%, 57%)",
-  "Sponsored Ads, single touch": "hsl(210, 10%, 64%)",
+  "Sponsored Ads, multi-format": "hsl(36, 78%, 57%)",
+  "Sponsored Ads, single format": "hsl(210, 10%, 64%)",
 };
 
 /* ── Types ─────────────────────────────────────────────────── */
@@ -67,9 +67,13 @@ export interface ConvPathRow {
   purchases: number;
   ntbSales: number;
   ntbPurchases: number;
-  dspTouches: number;
-  saTouches: number;
-  touches: number;
+  /** Total ad impressions on the path (Amazon's "frequency" columns). */
+  dspImpressions: number;
+  saImpressions: number;
+  impressions: number;
+  /** Distinct ad formats present on the path. */
+  dspFormats: number;
+  saFormats: number;
   pathType: PathType;
   raw: Record<string, string>;
 }
@@ -81,8 +85,8 @@ export interface PathTypeGroup {
   purchases: number;
   ntbSales: number;
   ntbPurchases: number;
-  /** Purchase-weighted mean touchpoints on the path. */
-  avgTouches: number;
+  /** Purchase-weighted mean ad impressions on the path. */
+  avgImpressions: number;
   pctOfSales: number;
   ntbSharePct: number;
   color: string;
@@ -152,12 +156,20 @@ function pick(row: Record<string, string>, name: string): string | undefined {
   return hit ? row[hit] : undefined;
 }
 
-function classify(dspTouches: number, saTouches: number): PathType {
-  if (dspTouches > 0 && saTouches > 0) return "DSP + Sponsored Ads";
-  if (dspTouches > 0) return "Amazon DSP only";
-  return dspTouches + saTouches > 1
-    ? "Sponsored Ads, multi-touch"
-    : "Sponsored Ads, single touch";
+/**
+ * Classify by how many distinct ad FORMATS appear on the path.
+ *
+ * The frequency columns hold average impressions per format, NOT a count of
+ * touchpoints — "Sponsored Products > [Purchase]" carries a frequency of ~1.5.
+ * Counting impressions here would wrongly label single-format paths as
+ * multi-touch.
+ */
+function classify(dspFormats: number, saFormats: number): PathType {
+  if (dspFormats > 0 && saFormats > 0) return "DSP + Sponsored Ads";
+  if (dspFormats > 0) return "Amazon DSP only";
+  return saFormats > 1
+    ? "Sponsored Ads, multi-format"
+    : "Sponsored Ads, single format";
 }
 
 /* ── Public parser ─────────────────────────────────────────── */
@@ -170,18 +182,22 @@ export function parseConvPathReport(raw: string): ConvPathSummary {
   const rows: ConvPathRow[] = records
     .filter(r => (pick(r, "Conversion path") ?? "").trim() !== "")
     .map(r => {
-      const dspTouches = DSP_COLS.reduce((s, c) => s + num(pick(r, c)), 0);
-      const saTouches = SA_COLS.reduce((s, c) => s + num(pick(r, c)), 0);
+      const dspImpressions = DSP_COLS.reduce((s, c) => s + num(pick(r, c)), 0);
+      const saImpressions = SA_COLS.reduce((s, c) => s + num(pick(r, c)), 0);
+      const dspFormats = DSP_COLS.filter(c => num(pick(r, c)) > 0).length;
+      const saFormats = SA_COLS.filter(c => num(pick(r, c)) > 0).length;
       return {
         path: (pick(r, "Conversion path") ?? "").trim(),
         sales: num(pick(r, "Sales")),
         purchases: num(pick(r, "Purchases")),
         ntbSales: num(pick(r, "New-to-brand product sales")),
         ntbPurchases: num(pick(r, "New-to-brand purchases")),
-        dspTouches,
-        saTouches,
-        touches: dspTouches + saTouches,
-        pathType: classify(dspTouches, saTouches),
+        dspImpressions,
+        saImpressions,
+        impressions: dspImpressions + saImpressions,
+        dspFormats,
+        saFormats,
+        pathType: classify(dspFormats, saFormats),
         raw: r,
       };
     });
@@ -196,7 +212,7 @@ export function parseConvPathReport(raw: string): ConvPathSummary {
     const sales = gr.reduce((s, r) => s + r.sales, 0);
     const purchases = gr.reduce((s, r) => s + r.purchases, 0);
     const ntbSales = gr.reduce((s, r) => s + r.ntbSales, 0);
-    const touchWeighted = gr.reduce((s, r) => s + r.touches * r.purchases, 0);
+    const impWeighted = gr.reduce((s, r) => s + r.impressions * r.purchases, 0);
     return {
       pathType,
       paths: gr.length,
@@ -204,7 +220,7 @@ export function parseConvPathReport(raw: string): ConvPathSummary {
       purchases,
       ntbSales,
       ntbPurchases: gr.reduce((s, r) => s + r.ntbPurchases, 0),
-      avgTouches: purchases > 0 ? touchWeighted / purchases : 0,
+      avgImpressions: purchases > 0 ? impWeighted / purchases : 0,
       pctOfSales: totalSales > 0 ? (sales / totalSales) * 100 : 0,
       ntbSharePct: sales > 0 ? (ntbSales / sales) * 100 : 0,
       color: PATH_TYPE_COLORS[pathType],
