@@ -6,6 +6,7 @@ import {
   parseConvPathReport,
   type ConvPathSummary,
   type PathTypeGroup,
+  PATH_TYPE_COLORS,
 } from "@/lib/conv-path-data";
 
 /**
@@ -261,10 +262,86 @@ const ConversionPathSection = ({ slug, num = "09" }: Props) => {
         </div>
       </div>
 
+      {/* DSP contribution — stacked build from Sponsored-Ads-only baseline */}
+      <div className="px-6 md:px-8 py-8 border-t border-border">
+        <h3 className="font-display font-bold text-xs uppercase tracking-[0.2em] text-muted-foreground mb-1">
+          DSP Contribution to Sales
+        </h3>
+        <p className="font-body text-xs text-muted-foreground mb-6">
+          Attributed sales on paths that included Amazon DSP, stacked on the Sponsored-Ads-only baseline.
+        </p>
+
+        {(() => {
+          const d = summary.dsp;
+          const bars = [
+            { label: "Sponsored Ads only", value: d.baselineSales, color: PATH_TYPE_COLORS["Sponsored Ads"] },
+            { label: "DSP-assisted (DSP + Sponsored Ads)", value: d.assistedSales, color: PATH_TYPE_COLORS["DSP + Sponsored Ads"] },
+            { label: "DSP-exclusive (no Sponsored Ads touch)", value: d.exclusiveSales, color: PATH_TYPE_COLORS["Amazon DSP only"] },
+          ].filter(b => b.value > 0);
+
+          return (
+            <>
+              {/* Single stacked bar */}
+              <div className="flex h-9 w-full rounded-lg overflow-hidden border border-border mb-3">
+                {bars.map((b, i) => (
+                  <motion.div
+                    key={b.label}
+                    initial={{ width: 0 }}
+                    whileInView={{ width: `${(b.value / d.totalSales) * 100}%` }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.7, delay: 0.12 * i, ease: "easeOut" }}
+                    style={{ background: b.color }}
+                    className="h-full"
+                  />
+                ))}
+              </div>
+
+              {/* DSP bracket — spans the DSP portion of the bar */}
+              <div className="flex w-full">
+                <div style={{ width: `${(d.baselineSales / d.totalSales) * 100}%` }} />
+                <div style={{ width: `${d.dspInvolvedPct}%` }}>
+                  <div className="border-b-2 border-x-2 border-primary rounded-b-md h-2.5" />
+                  <p className="pt-2 text-center font-display font-extrabold text-sm text-primary whitespace-nowrap">
+                    {currency(d.dspInvolvedSales, code)} on DSP paths · {pct(d.dspInvolvedPct)} of sales
+                  </p>
+                </div>
+              </div>
+              <div className="h-7" />
+
+              {/* Legend + the three hard numbers */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {bars.map(b => (
+                  <div key={b.label} className="border-l-4 pl-3 py-1" style={{ borderColor: b.color }}>
+                    <p className="font-display font-extrabold text-xl tracking-tight tabular-nums">
+                      {currency(b.value, code)}
+                    </p>
+                    <p className="font-body text-[11px] text-muted-foreground leading-snug mt-0.5">{b.label}</p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {[
+                  { v: int(d.exclusivePurchases + d.assistedPurchases), l: "Purchases on paths involving DSP" },
+                  { v: int(d.dspNtbPurchases), l: "New-to-brand purchases on paths involving DSP" },
+                  { v: int(d.exclusivePurchases), l: `Purchases with no Sponsored Ads touch (${pct(d.exclusivePct)} of sales)` },
+                ].map(k => (
+                  <div key={k.l} className="bg-background rounded-xl border border-border p-4">
+                    <p className="font-display font-extrabold text-2xl tracking-tight tabular-nums">{k.v}</p>
+                    <p className="font-body text-[11px] text-muted-foreground leading-snug mt-1">{k.l}</p>
+                  </div>
+                ))}
+              </div>
+            </>
+          );
+        })()}
+      </div>
+
       <div className="px-6 md:px-8 pb-7">
         <p className="font-body text-[11px] text-muted-foreground">
           Share of attributed sales by ad-type combination on the path to purchase. Select a slice or row
-          for detail. Amazon does not report cost at path level.
+          for detail. DSP-exclusive sales are those on conversion paths with no Sponsored Ads touch.
+          Amazon does not report cost at path level.
         </p>
       </div>
       {/* Slide footer bar — same treatment as every other report slide */}

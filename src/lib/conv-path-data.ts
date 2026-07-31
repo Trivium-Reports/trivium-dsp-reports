@@ -13,9 +13,8 @@
  * appeared on it. There is NO cost/spend column, so path-level ROAS cannot be
  * computed and must never be displayed.
  *
- * Rows are grouped into four path types by which ad families appear:
- *   DSP + Sponsored Ads · Amazon DSP only · Sponsored Ads, multi-format ·
- *   Sponsored Ads, single format
+ * Rows are grouped into three path types by which ad families appear:
+ *   DSP + Sponsored Ads · Amazon DSP only · Sponsored Ads
  */
 
 /* ── Column groups ─────────────────────────────────────────── */
@@ -40,23 +39,20 @@ const SA_COLS = [
 export type PathType =
   | "DSP + Sponsored Ads"
   | "Amazon DSP only"
-  | "Sponsored Ads, multi-format"
-  | "Sponsored Ads, single format";
+  | "Sponsored Ads";
 
 /** Display order — also the donut order. */
 export const PATH_TYPE_ORDER: PathType[] = [
   "DSP + Sponsored Ads",
   "Amazon DSP only",
-  "Sponsored Ads, multi-format",
-  "Sponsored Ads, single format",
+  "Sponsored Ads",
 ];
 
 /** hsl() strings so the donut stays inside the report's palette. */
 export const PATH_TYPE_COLORS: Record<PathType, string> = {
   "DSP + Sponsored Ads": "hsl(25, 100%, 50%)",
   "Amazon DSP only": "hsl(213, 51%, 25%)",
-  "Sponsored Ads, multi-format": "hsl(36, 78%, 57%)",
-  "Sponsored Ads, single format": "hsl(210, 10%, 64%)",
+  "Sponsored Ads": "hsl(36, 78%, 57%)",
 };
 
 /* ── Types ─────────────────────────────────────────────────── */
@@ -92,6 +88,26 @@ export interface PathTypeGroup {
   color: string;
 }
 
+/**
+ * DSP contribution, expressed as a path-based floor rather than a causal claim.
+ *
+ * `dspExclusiveSales` = sales on paths with ZERO Sponsored Ads touch, i.e. the
+ * portion Sponsored Ads had no opportunity to influence.
+ * `dspAssistedSales` = sales on paths where DSP appeared alongside Sponsored Ads.
+ */
+export interface DspContribution {
+  baselineSales: number;
+  assistedSales: number;
+  exclusiveSales: number;
+  dspInvolvedSales: number;
+  dspInvolvedPct: number;
+  exclusivePct: number;
+  exclusivePurchases: number;
+  assistedPurchases: number;
+  dspNtbPurchases: number;
+  totalSales: number;
+}
+
 export interface ConvPathSummary {
   rows: ConvPathRow[];
   groups: PathTypeGroup[];
@@ -103,6 +119,7 @@ export interface ConvPathSummary {
     ntbPurchases: number;
     ntbSharePct: number;
   };
+  dsp: DspContribution;
   period: { start: string; end: string };
   currency: string;
   hasUsefulData: boolean;
@@ -161,15 +178,13 @@ function pick(row: Record<string, string>, name: string): string | undefined {
  *
  * The frequency columns hold average impressions per format, NOT a count of
  * touchpoints — "Sponsored Products > [Purchase]" carries a frequency of ~1.5.
- * Counting impressions here would wrongly label single-format paths as
- * multi-touch.
+ * Counting impressions here would wrongly split single-format Sponsored Ads
+ * paths out as "multi-touch".
  */
 function classify(dspFormats: number, saFormats: number): PathType {
   if (dspFormats > 0 && saFormats > 0) return "DSP + Sponsored Ads";
   if (dspFormats > 0) return "Amazon DSP only";
-  return saFormats > 1
-    ? "Sponsored Ads, multi-format"
-    : "Sponsored Ads, single format";
+  return "Sponsored Ads";
 }
 
 /* ── Public parser ─────────────────────────────────────────── */
@@ -227,10 +242,29 @@ export function parseConvPathReport(raw: string): ConvPathSummary {
     };
   }).filter(g => g.paths > 0);
 
+  const grp = (t: PathType) => groups.find(g => g.pathType === t);
+  const baseline = grp("Sponsored Ads");
+  const assisted = grp("DSP + Sponsored Ads");
+  const exclusive = grp("Amazon DSP only");
+  const dspInvolved = (assisted?.sales ?? 0) + (exclusive?.sales ?? 0);
+  const dsp: DspContribution = {
+    baselineSales: baseline?.sales ?? 0,
+    assistedSales: assisted?.sales ?? 0,
+    exclusiveSales: exclusive?.sales ?? 0,
+    dspInvolvedSales: dspInvolved,
+    dspInvolvedPct: totalSales > 0 ? (dspInvolved / totalSales) * 100 : 0,
+    exclusivePct: totalSales > 0 ? ((exclusive?.sales ?? 0) / totalSales) * 100 : 0,
+    exclusivePurchases: exclusive?.purchases ?? 0,
+    assistedPurchases: assisted?.purchases ?? 0,
+    dspNtbPurchases: (assisted?.ntbPurchases ?? 0) + (exclusive?.ntbPurchases ?? 0),
+    totalSales,
+  };
+
   const first = records[0];
   return {
     rows,
     groups,
+    dsp,
     totals: {
       paths: rows.length,
       sales: totalSales,
@@ -254,6 +288,11 @@ function emptySummary(headers: string[]): ConvPathSummary {
     rows: [],
     groups: [],
     totals: { paths: 0, sales: 0, purchases: 0, ntbSales: 0, ntbPurchases: 0, ntbSharePct: 0 },
+    dsp: {
+      baselineSales: 0, assistedSales: 0, exclusiveSales: 0, dspInvolvedSales: 0,
+      dspInvolvedPct: 0, exclusivePct: 0, exclusivePurchases: 0,
+      assistedPurchases: 0, dspNtbPurchases: 0, totalSales: 0,
+    },
     period: { start: "", end: "" },
     currency: "USD",
     hasUsefulData: false,
