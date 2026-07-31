@@ -12,6 +12,7 @@ import {
   PolarGrid, PolarAngleAxis, PolarRadiusAxis, Legend
 } from "recharts";
 import type { DSPSummary } from "@/lib/dsp-data";
+import ConversionPathSection from "@/components/ConversionPathSection";
 
 const fmt = (n: number) => n >= 1_000_000 ? `${(n / 1_000_000).toFixed(2)}M` : n >= 1_000 ? `${(n / 1_000).toFixed(1)}K` : n.toFixed(0);
 const fmtCurrency = (n: number) => `$${fmt(n)}`;
@@ -133,10 +134,12 @@ const KPICardLarge = ({ label, value, subtitle, icon: Icon, trend }: {
 /* ─── Main Report ─── */
 
 interface DSPReportProps {
+  /** Client slug — used to load the optional conversion-path dataset. */
+  slug?: string;
   data: DSPSummary;
 }
 
-const DSPReport = ({ data }: DSPReportProps) => {
+const DSPReport = ({ data, slug }: DSPReportProps) => {
   const shortDate = (d: string) => d.split(', ')[0] || d;
   /** Compact period label: "Jun 28 – Jul 4" */
   const periodLabel = (start: string, end: string) =>
@@ -915,8 +918,12 @@ const DSPReport = ({ data }: DSPReportProps) => {
           </div>
         </div>
       </SectionSlide>
-      {/* ═══ SLIDE 09: Daily Data Table ═══ */}
-      <SectionSlide num="09">
+      {/* ═══ SLIDE 09: Path to Conversion (renders only when the brand has a
+             Sponsored Ads conversion-path dataset) ═══ */}
+      {slug && <ConversionPathSection slug={slug} num="09" />}
+
+      {/* ═══ SLIDE 10: Daily Data Table ═══ */}
+      <SectionSlide num="10">
         <div className="p-6 md:p-8">
           <div className="flex items-center justify-between mb-6">
             <div>

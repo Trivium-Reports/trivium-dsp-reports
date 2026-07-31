@@ -4,7 +4,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import triviumLogo from "@/assets/trivium-logo.png";
 import LandingHero from "@/components/LandingHero";
 import DSPReport from "@/components/DSPReport";
-import ConversionPathSection from "@/components/ConversionPathSection";
 import NotFound from "./NotFound";
 import { parseDSPReport, type DSPSummary } from "@/lib/dsp-data";
 import { getClientBySlug } from "@/config/clients";
@@ -115,14 +114,7 @@ const Index = ({ mode = "full" }: IndexProps) => {
           )}
           {view === "report" && dspData && (
             <motion.div key="report" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-              <DSPReport data={dspData} />
-              {/* Mirai-only: Sponsored Ads conversion path section.
-                  Component silently renders nothing if the conv-path CSV is absent. */}
-              {client.slug === "mirai-clinical" && (
-                <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
-                  <ConversionPathSection slug={client.slug} />
-                </div>
-              )}
+              <DSPReport data={dspData} slug={client.slug} />
             </motion.div>
           )}
         </AnimatePresence>

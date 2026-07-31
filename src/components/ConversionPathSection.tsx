@@ -1,48 +1,83 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { GitBranch, Layers, ArrowRight, DollarSign, ShoppingCart, Activity } from "lucide-react";
-import { parseConvPathReport, type ConvPathSummary } from "@/lib/conv-path-data";
-
-const fmt = (n: number) =>
-  n >= 1_000_000 ? `${(n / 1_000_000).toFixed(2)}M`
-  : n >= 1_000 ? `${(n / 1_000).toFixed(1)}K`
-  : n.toFixed(0);
-const fmtCurrency = (n: number) => `$${fmt(n)}`;
-const fmtPct = (n: number) => `${n.toFixed(1)}%`;
+import { GitBranch } from "lucide-react";
+import { PieChart, Pie, Cell, ResponsiveContainer, Sector } from "recharts";
+import {
+  parseConvPathReport,
+  type ConvPathSummary,
+  type PathTypeGroup,
+} from "@/lib/conv-path-data";
 
 /**
- * Mirai-only Conversion Path section.
+ * Sponsored Ads conversion path section — DSP × PPC path to conversion.
  *
- * Renders only when /data/<slug>/conv-path.csv exists and parses cleanly.
- * Silently no-ops on 404 (other brands) or when the CSV is missing.
+ * Renders only when /data/<slug>/conv-path.csv exists and parses cleanly;
+ * silent no-op otherwise (per 2026-06-08 direction: no empty placeholders).
  *
- * The "DSP × PPC interaction" story is the unique value here — this report
- * shows which combinations of DSP impressions + Sponsored Ads clicks
- * actually drive conversions, not just which channels did the last click.
+ * Data only — no interpretation, no commentary (client-report standard).
+ * Amazon's export carries no cost column, so no path-level ROAS is shown.
+ *
+ * Interaction: click or hover a donut slice or a table row to expand that
+ * path type; the donut centre and the table highlight follow the selection.
  */
+
+const currency = (n: number, code = "USD") =>
+  new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: code || "USD",
+    maximumFractionDigits: 0,
+  }).format(n);
+const int = (n: number) => new Intl.NumberFormat("en-US").format(Math.round(n));
+const pct = (n: number) => `${n.toFixed(1)}%`;
+
+const fmtDate = (s: string) => {
+  const d = new Date(s);
+  return Number.isNaN(d.getTime())
+    ? s
+    : d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
+};
+
+/** Expanded slice: pushes out and grows, matching the report's motion feel. */
+const ActiveSlice = (props: any) => {
+  const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill } = props;
+  return (
+    <Sector
+      cx={cx}
+      cy={cy}
+      innerRadius={innerRadius}
+      outerRadius={outerRadius + 10}
+      startAngle={startAngle}
+      endAngle={endAngle}
+      fill={fill}
+      cornerRadius={3}
+    />
+  );
+};
 
 interface Props {
   slug: string;
+  /** Slide number shown in the Strategic Insight Deck bar. */
+  num?: string;
 }
 
-const ConversionPathSection = ({ slug }: Props) => {
+const ConversionPathSection = ({ slug, num = "09" }: Props) => {
   const [summary, setSummary] = useState<ConvPathSummary | null>(null);
   const [loading, setLoading] = useState(true);
   const [hadFile, setHadFile] = useState(false);
+  const [selected, setSelected] = useState<number | null>(null);
+  const [hovered, setHovered] = useState<number | null>(null);
 
   useEffect(() => {
     setLoading(true);
     fetch(`/data/${slug}/conv-path.csv`)
       .then(r => {
         if (!r.ok) throw new Error(`status ${r.status}`);
-        // SPA fallback returns text/html when file doesn't exist
         const ct = r.headers.get("content-type") || "";
         if (ct.includes("text/html")) throw new Error("html_fallback");
         return r.text();
       })
       .then(text => {
         const trimmed = text.trim();
-        // Defensive: HTML or empty → no data
         if (!trimmed || trimmed.startsWith("<") || trimmed.split("\n").length < 2) {
           throw new Error("empty_or_html");
         }
@@ -56,11 +91,19 @@ const ConversionPathSection = ({ slug }: Props) => {
       .finally(() => setLoading(false));
   }, [slug]);
 
-  // Render nothing if no conv-path data for this brand (silent no-op
-  // instead of an empty placeholder card per 2026-06-08 user direction)
+  const active = selected !== null ? selected : hovered;
+  const groups: PathTypeGroup[] = summary?.groups ?? [];
+  const chartData = useMemo(
+    () => groups.map(g => ({ name: g.pathType, value: g.sales, color: g.color })),
+    [groups]
+  );
+
   if (loading) return null;
   if (!hadFile || !summary) return null;
   if (!summary.hasUsefulData) return null;
+
+  const { totals, period, currency: code } = summary;
+  const focus = active !== null ? groups[active] : null;
 
   return (
     <motion.section
@@ -70,120 +113,168 @@ const ConversionPathSection = ({ slug }: Props) => {
       transition={{ duration: 0.6 }}
       className="bg-card rounded-2xl border border-border shadow-sm overflow-hidden"
     >
-      <div className="px-6 sm:px-8 py-8 border-b border-border">
-        <div className="flex items-center gap-2 mb-3">
-          <GitBranch className="w-4 h-4 text-primary" />
-          <span className="uppercase tracking-[0.2em] text-[10px] font-display font-bold text-primary">
-            DSP × PPC Interaction
-          </span>
-        </div>
-        <h2 className="font-display font-extrabold text-2xl sm:text-3xl mb-2">
-          Conversion Path
+      {/* Section header — matches the report's slide header pattern */}
+      <div className="px-6 md:px-8 pt-6 md:pt-8 pb-6 border-b border-border">
+        <p className="font-display font-bold text-xs uppercase tracking-[0.2em] text-primary mb-1 flex items-center gap-1.5">
+          <GitBranch className="w-3.5 h-3.5" /> DSP × PPC Interaction
+        </p>
+        <h2 className="font-display font-extrabold text-2xl uppercase tracking-tight mb-2">
+          Path to Conversion
         </h2>
-        <p className="text-sm text-muted-foreground font-body max-w-2xl">
-          How DSP impressions and Sponsored Ads touchpoints combine to drive
-          conversions. Multi-touch paths often hide the true contribution of
-          upper-funnel DSP.
+        <p className="font-body text-sm text-muted-foreground">
+          {period.start && period.end
+            ? `${fmtDate(period.start)} – ${fmtDate(period.end)} · `
+            : ""}
+          {int(totals.paths)} distinct conversion paths
         </p>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-border">
-        <Stat icon={ShoppingCart} label="Path conversions" value={fmt(summary.totals.conversions)} />
-        <Stat icon={DollarSign} label="Path sales" value={fmtCurrency(summary.totals.sales)} />
-        <Stat icon={Activity} label="Path spend" value={fmtCurrency(summary.totals.spend)} />
-        <Stat icon={Layers} label="Path ROAS" value={summary.totals.roas.toFixed(2)} />
+      {/* Totals */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-border border-b border-border">
+        {[
+          { label: "Attributed Sales", value: currency(totals.sales, code) },
+          { label: "Purchases", value: int(totals.purchases) },
+          { label: "New-to-Brand Sales", value: pct(totals.ntbSharePct) },
+        ].map((k, i) => (
+          <motion.div
+            key={k.label}
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: i * 0.06 }}
+            className="px-6 md:px-8 py-6"
+          >
+            <p className="font-display font-bold text-[10px] uppercase tracking-widest text-muted-foreground mb-2">
+              {k.label}
+            </p>
+            <p className="font-display font-extrabold text-2xl sm:text-3xl tracking-tight">{k.value}</p>
+          </motion.div>
+        ))}
       </div>
 
-      <div className="px-6 sm:px-8 py-8 grid md:grid-cols-3 gap-6">
-        <Insight
-          title="DSP-involved paths"
-          headline={fmtPct(summary.dspInvolvedShare.pctOfConversions)}
-          subline={`of conversions · ${fmtCurrency(summary.dspInvolvedShare.salesUsd)} in sales`}
-          detail={`${summary.dspInvolvedShare.pathCount} of ${summary.rows.length} paths included a DSP touchpoint`}
-        />
-        <Insight
-          title="Sponsored Ads paths"
-          headline={fmtPct(summary.spInvolvedShare.pctOfConversions)}
-          subline={`of conversions · ${fmtCurrency(summary.spInvolvedShare.salesUsd)} in sales`}
-          detail={`${summary.spInvolvedShare.pathCount} of ${summary.rows.length} paths included a Sponsored touchpoint`}
-        />
-        <Insight
-          title="Multi-touch share"
-          headline={fmtPct(summary.multiTouchShare.pctOfConversions)}
-          subline={`of conversions involved 2+ touches`}
-          detail={`${summary.multiTouchShare.pathCount} multi-touch paths out of ${summary.rows.length}`}
-        />
-      </div>
+      {/* Donut + breakdown */}
+      <div className="px-6 md:px-8 py-8 grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-8 lg:gap-10 items-center">
+        <div className="relative h-[260px] w-full max-w-[260px] mx-auto">
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={chartData}
+                dataKey="value"
+                nameKey="name"
+                cx="50%"
+                cy="50%"
+                innerRadius={68}
+                outerRadius={104}
+                paddingAngle={1.5}
+                startAngle={90}
+                endAngle={-270}
+                stroke="none"
+                isAnimationActive
+                animationDuration={700}
+                activeIndex={active ?? undefined}
+                activeShape={ActiveSlice}
+                onMouseEnter={(_, i) => setHovered(i)}
+                onMouseLeave={() => setHovered(null)}
+                onClick={(_, i) => setSelected(prev => (prev === i ? null : i))}
+                className="cursor-pointer"
+              >
+                {chartData.map(d => (
+                  <Cell
+                    key={d.name}
+                    fill={d.color}
+                    opacity={active === null || d.name === focus?.pathType ? 1 : 0.32}
+                  />
+                ))}
+              </Pie>
+            </PieChart>
+          </ResponsiveContainer>
 
-      <div className="px-6 sm:px-8 pb-8">
-        <h3 className="font-display font-bold text-sm uppercase tracking-wider text-muted-foreground mb-3">
-          Top paths by conversions
-        </h3>
-        <div className="overflow-x-auto rounded-xl border border-border">
-          <table className="w-full text-sm">
-            <thead className="bg-muted/40 text-left">
-              <tr>
-                <th className="px-4 py-2.5 font-display font-bold text-xs uppercase tracking-wider">Path</th>
-                <th className="px-4 py-2.5 font-display font-bold text-xs uppercase tracking-wider text-right">Conv</th>
-                <th className="px-4 py-2.5 font-display font-bold text-xs uppercase tracking-wider text-right">Sales</th>
-                <th className="px-4 py-2.5 font-display font-bold text-xs uppercase tracking-wider text-right">ROAS</th>
+          {/* Centre readout */}
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
+            <p className="font-display font-extrabold text-2xl tracking-tight leading-none">
+              {focus ? pct(focus.pctOfSales) : "100%"}
+            </p>
+            <p className="font-display font-bold text-sm mt-1">
+              {currency(focus ? focus.sales : totals.sales, code)}
+            </p>
+            <p className="font-body text-[8.5px] uppercase tracking-[0.12em] text-muted-foreground mt-1.5 leading-[1.3] w-[116px]">
+              {focus ? focus.pathType : "Total attributed sales"}
+            </p>
+          </div>
+        </div>
+
+        <div className="overflow-x-auto -mx-6 md:-mx-8 lg:mx-0 px-6 md:px-8 lg:px-0">
+          <table className="w-full min-w-[520px] border-collapse">
+            <thead>
+              <tr className="border-b border-border">
+                {["Path Type", "% Sales", "Sales", "Purchases", "Avg Touchpoints", "NTB %"].map((h, i) => (
+                  <th
+                    key={h}
+                    className={`font-display font-bold text-[10px] uppercase tracking-widest text-muted-foreground pb-3 ${
+                      i === 0 ? "text-left" : "text-right pl-3"
+                    }`}
+                  >
+                    {h}
+                  </th>
+                ))}
               </tr>
             </thead>
             <tbody>
-              {summary.topByConversions.map((row, i) => (
-                <tr key={i} className="border-t border-border">
-                  <td className="px-4 py-2.5 font-mono text-xs leading-relaxed">
-                    <PathBadges path={row.path} />
+              {groups.map((g, i) => (
+                <tr
+                  key={g.pathType}
+                  onMouseEnter={() => setHovered(i)}
+                  onMouseLeave={() => setHovered(null)}
+                  onClick={() => setSelected(prev => (prev === i ? null : i))}
+                  className={`border-b border-border/60 cursor-pointer transition-colors ${
+                    active === i ? "bg-primary/5" : "hover:bg-muted/50"
+                  }`}
+                >
+                  <td className="py-3 pr-3">
+                    <span className="flex items-center gap-2.5">
+                      <span
+                        className={`w-2.5 h-2.5 rounded-full shrink-0 ${active === i ? "ring-2 ring-offset-1 ring-primary/40" : ""}`}
+                        style={{ background: g.color }}
+                      />
+                      <span className="font-body font-semibold text-[13px]">{g.pathType}</span>
+                    </span>
                   </td>
-                  <td className="px-4 py-2.5 text-right font-display font-bold tabular-nums">{fmt(row.conversions)}</td>
-                  <td className="px-4 py-2.5 text-right tabular-nums">{fmtCurrency(row.sales)}</td>
-                  <td className="px-4 py-2.5 text-right tabular-nums">{row.roas.toFixed(2)}</td>
+                  <td className="py-3 pl-3 text-right font-display font-extrabold text-[15px] tabular-nums">
+                    {pct(g.pctOfSales)}
+                  </td>
+                  <td className="py-3 pl-3 text-right font-body font-semibold text-[13px] tabular-nums">
+                    {currency(g.sales, code)}
+                  </td>
+                  <td className="py-3 pl-3 text-right font-body font-semibold text-[13px] tabular-nums">
+                    {int(g.purchases)}
+                  </td>
+                  <td className="py-3 pl-3 text-right font-body font-semibold text-[13px] tabular-nums">
+                    {g.avgTouches.toFixed(1)}
+                  </td>
+                  <td className="py-3 pl-3 text-right font-body font-semibold text-[13px] tabular-nums">
+                    {pct(g.ntbSharePct)}
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
       </div>
-    </motion.section>
-  );
-};
 
-const Stat = ({ icon: Icon, label, value }: { icon: any; label: string; value: string }) => (
-  <div className="bg-card px-5 py-4">
-    <div className="flex items-center gap-1.5 mb-1">
-      <Icon className="w-3.5 h-3.5 text-muted-foreground" />
-      <span className="text-[10px] uppercase tracking-wider font-display font-bold text-muted-foreground">{label}</span>
-    </div>
-    <p className="font-display font-extrabold text-xl tracking-tight tabular-nums">{value}</p>
-  </div>
-);
-
-const Insight = ({ title, headline, subline, detail }: { title: string; headline: string; subline: string; detail: string }) => (
-  <div className="bg-muted/40 border border-border rounded-xl p-5">
-    <p className="text-[10px] uppercase tracking-wider font-display font-bold text-muted-foreground mb-2">{title}</p>
-    <p className="font-display font-extrabold text-3xl tabular-nums mb-1">{headline}</p>
-    <p className="text-xs text-foreground font-body mb-2">{subline}</p>
-    <p className="text-xs text-muted-foreground font-body leading-relaxed">{detail}</p>
-  </div>
-);
-
-const PathBadges = ({ path }: { path: string }) => {
-  // Split on common arrow separators; render each token as a chip
-  const tokens = path.split(/\s*(?:>|→|->)\s*/).filter(Boolean);
-  if (tokens.length === 0) {
-    return <span>{path}</span>;
-  }
-  return (
-    <span className="inline-flex flex-wrap items-center gap-1.5">
-      {tokens.map((t, i) => (
-        <span key={i} className="inline-flex items-center gap-1">
-          <span className="px-2 py-0.5 bg-primary/10 border border-primary/20 rounded text-[11px] font-display font-semibold text-primary">
-            {t}
-          </span>
-          {i < tokens.length - 1 && <ArrowRight className="w-3 h-3 text-muted-foreground" />}
+      <div className="px-6 md:px-8 pb-7">
+        <p className="font-body text-[11px] text-muted-foreground">
+          Share of attributed sales by ad-type combination on the path to purchase. Select a slice or row
+          for detail. Amazon does not report cost at path level.
+        </p>
+      </div>
+      {/* Slide footer bar — same treatment as every other report slide */}
+      <div className="flex items-center justify-between px-6 py-3 bg-primary">
+        <span className="font-display font-bold text-[11px] uppercase tracking-[0.2em] text-primary-foreground">
+          Strategic Insight Deck
         </span>
-      ))}
-    </span>
+        <span className="font-display font-extrabold text-sm text-primary-foreground">{num}</span>
+      </div>
+    </motion.section>
   );
 };
 

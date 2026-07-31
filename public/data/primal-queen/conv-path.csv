@@ -1,0 +1,61 @@
+Start Date,End Date,Brand,Conversion path,Sales,Purchases,New-to-brand product sales,New-to-brand purchases,Sponsored Brands display frequency,Sponsored Display display frequency,Amazon DSP display frequency,Sponsored Brands video frequency,Amazon DSP online video frequency,Sponsored TV streaming TV frequency,Amazon DSP streaming TV frequency,Amazon DSP audio frequency,Sponsored Products frequency,Sponsored Display frequency,Sponsored Display online video frequency,Currency
+2026-07-08,2026-07-25,Primal Queen,(Sponsored Display) > Sponsored Products > Display (Amazon DSP) > [Purchase],407.0,7.0,349.0,6.0,0.0,0.0,5.714285714285714,0.0,0.0,0.0,0.0,0.0,1.7142857142857142,19.857142857142858,0.0,USD
+2026-07-07,2026-07-26,Primal Queen,Sponsored Products > Display (Sponsored Brands) > Display (Amazon DSP) > [Purchase],612.0,3.0,612.0,3.0,2.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,2.3333333333333335,0.0,0.0,USD
+2026-07-01,2026-07-29,Primal Queen,Online Video (Sponsored Brands) > Sponsored Products > [Purchase],3655.0,57.0,2605.0,42.0,0.0,0.0,0.0,1.105263157894737,0.0,0.0,0.0,0.0,1.719298245614035,0.0,0.0,USD
+2026-07-04,2026-07-25,Primal Queen,Display (Amazon DSP) >  (Sponsored Display) > Sponsored Products > [Purchase],764.0,12.0,0.0,0.0,0.0,0.0,33.0,0.0,0.0,0.0,0.0,0.0,2.8333333333333335,5.583333333333333,0.0,USD
+2026-07-16,2026-07-21,Primal Queen,Display (Sponsored Brands) > Display (Amazon DSP) > Sponsored Products > [Purchase],174.0,3.0,116.0,2.0,1.0,0.0,5.333333333333333,0.0,0.0,0.0,0.0,0.0,1.3333333333333333,0.0,0.0,USD
+2026-07-03,2026-07-29,Primal Queen,Online Video (Sponsored Brands) > Display (Amazon DSP) > Sponsored Products > [Purchase],290.0,5.0,174.0,3.0,0.0,0.0,2.0,1.4,0.0,0.0,0.0,0.0,1.2,0.0,0.0,USD
+2026-07-01,2026-07-29,Primal Queen,Sponsored Products > Display (Amazon DSP) >  (Sponsored Display) > [Purchase],4396.0,71.0,2446.0,41.0,0.0,0.0,16.04225352112676,0.0,0.0,0.0,0.0,0.0,2.887323943661972,8.859154929577464,0.0,USD
+2026-07-01,2026-07-28,Primal Queen,Display (Sponsored Brands) > [Purchase],1277.0,20.0,754.0,13.0,1.45,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,USD
+2026-07-03,2026-07-15,Primal Queen,Online Video (Sponsored Brands) > Display (Amazon DSP) >  (Sponsored Display) > [Purchase],116.0,2.0,116.0,2.0,0.0,0.0,1.0,1.5,0.0,0.0,0.0,0.0,0.0,3.5,0.0,USD
+2026-07-07,2026-07-23,Primal Queen,Online Video (Sponsored Brands) > Display (Sponsored Brands) > [Purchase],116.0,2.0,116.0,2.0,1.5,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,USD
+2026-07-15,2026-07-15,Primal Queen,Online Video (Sponsored Brands) >  (Sponsored Display) > Sponsored Products > [Purchase],58.0,1.0,58.0,1.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,1.0,4.0,0.0,USD
+2026-07-01,2026-07-29,Primal Queen,(Sponsored Display) > Sponsored Products > [Purchase],1173.0,19.0,1056.0,17.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.8421052631578947,4.0,0.0,USD
+2026-07-04,2026-07-26,Primal Queen,Display (Amazon DSP) > Online Video (Sponsored Brands) > [Purchase],986.0,14.0,58.0,1.0,0.0,0.0,10.857142857142858,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,USD
+2026-07-01,2026-07-29,Primal Queen,Sponsored Products > Display (Amazon DSP) > [Purchase],42186.93,669.0,17678.99,286.0,0.0,0.0,8.974588938714499,0.0,0.0,0.0,0.0,0.0,2.2152466367713006,0.0,0.0,USD
+2026-07-02,2026-07-29,Primal Queen,Online Video (Sponsored Brands) > Display (Amazon DSP) > [Purchase],1326.0,21.0,1094.0,17.0,0.0,0.0,2.2857142857142856,1.0476190476190477,0.0,0.0,0.0,0.0,0.0,0.0,0.0,USD
+2026-07-10,2026-07-10,Primal Queen,Sponsored Products > Display (Amazon DSP) > Online Video (Sponsored Brands) >  (Sponsored Display) > [Purchase],58.0,1.0,0.0,0.0,0.0,0.0,40.0,1.0,0.0,0.0,0.0,0.0,3.0,2.0,0.0,USD
+2026-07-06,2026-07-10,Primal Queen,Display (Sponsored Brands) > Online Video (Sponsored Brands) > [Purchase],116.0,2.0,116.0,2.0,1.5,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,USD
+2026-07-03,2026-07-29,Primal Queen,Sponsored Products > Display (Sponsored Brands) > Online Video (Sponsored Brands) > Display (Amazon DSP) > [Purchase],116.0,2.0,58.0,1.0,1.5,0.0,1.0,1.0,0.0,0.0,0.0,0.0,6.0,0.0,0.0,USD
+2026-07-01,2026-07-29,Primal Queen,Display (Amazon DSP) > [Purchase],75539.73,1198.0,6315.99,101.0,0.0,0.0,16.71118530884808,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,USD
+2026-07-01,2026-07-26,Primal Queen,Sponsored Products >  (Sponsored Display) > Display (Amazon DSP) > [Purchase],2220.0,35.0,1698.0,27.0,0.0,0.0,2.942857142857143,0.0,0.0,0.0,0.0,0.0,2.4857142857142858,8.2,0.0,USD
+2026-07-12,2026-07-27,Primal Queen,(Sponsored Display) > Display (Amazon DSP) > Sponsored Products > [Purchase],341.0,5.0,117.0,2.0,0.0,0.0,9.0,0.0,0.0,0.0,0.0,0.0,1.2,3.2,0.0,USD
+2026-07-01,2026-07-29,Primal Queen,Sponsored Products > Online Video (Sponsored Brands) > [Purchase],3843.0,62.0,2680.0,44.0,0.0,0.0,0.0,1.1935483870967742,0.0,0.0,0.0,0.0,1.9838709677419355,0.0,0.0,USD
+2026-07-14,2026-07-14,Primal Queen,Online Video (Sponsored Brands) > Display (Sponsored Brands) > Sponsored Products > [Purchase],58.0,1.0,58.0,1.0,1.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,3.0,0.0,0.0,USD
+2026-07-14,2026-07-16,Primal Queen,Online Video (Sponsored Brands) > Sponsored Products > Display (Sponsored Brands) > [Purchase],116.0,2.0,116.0,2.0,1.0,0.0,0.0,2.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,USD
+2026-07-01,2026-07-29,Primal Queen,Sponsored Products >  (Sponsored Display) > [Purchase],6705.0,113.0,6066.0,101.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,2.079646017699115,3.6548672566371683,0.0,USD
+2026-07-03,2026-07-03,Primal Queen,Display (Amazon DSP) > Sponsored Products > Display (Sponsored Brands) > [Purchase],58.0,1.0,0.0,0.0,4.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,USD
+2026-07-23,2026-07-23,Primal Queen,Online Video (Sponsored Brands) > Sponsored Products > Display (Sponsored Brands) >  (Sponsored Display) > Display (Amazon DSP) > [Purchase],58.0,1.0,58.0,1.0,1.0,0.0,1.0,1.0,0.0,0.0,0.0,0.0,2.0,3.0,0.0,USD
+2026-07-05,2026-07-22,Primal Queen,Sponsored Products >  (Sponsored Display) > Online Video (Sponsored Brands) > [Purchase],349.0,6.0,349.0,6.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,5.5,5.666666666666667,0.0,USD
+2026-07-06,2026-07-26,Primal Queen,Sponsored Products > Display (Sponsored Brands) > Online Video (Sponsored Brands) > [Purchase],116.0,2.0,0.0,0.0,1.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,3.5,0.0,0.0,USD
+2026-07-01,2026-07-29,Primal Queen,Display (Amazon DSP) >  (Sponsored Display) > [Purchase],4490.97,74.0,464.0,8.0,0.0,0.0,23.986486486486488,0.0,0.0,0.0,0.0,0.0,0.0,5.027027027027027,0.0,USD
+2026-07-05,2026-07-10,Primal Queen,Display (Sponsored Brands) > Display (Amazon DSP) > [Purchase],116.0,2.0,58.0,1.0,2.0,0.0,3.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,USD
+2026-07-24,2026-07-24,Primal Queen,Display (Sponsored Brands) >  (Sponsored Display) > [Purchase],58.0,1.0,58.0,1.0,2.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,15.0,0.0,USD
+2026-07-01,2026-07-29,Primal Queen,Display (Amazon DSP) > Sponsored Products > [Purchase],28091.33,440.0,1865.99,32.0,0.0,0.0,27.636363636363637,0.0,0.0,0.0,0.0,0.0,1.5727272727272728,0.0,0.0,USD
+2026-07-15,2026-07-15,Primal Queen,(Sponsored Display) > Display (Amazon DSP) > Online Video (Sponsored Brands) > [Purchase],58.0,1.0,58.0,1.0,0.0,0.0,3.0,2.0,0.0,0.0,0.0,0.0,0.0,110.0,0.0,USD
+2026-07-28,2026-07-28,Primal Queen,Display (Amazon DSP) > Online Video (Sponsored Brands) > Sponsored Products > [Purchase],58.0,1.0,58.0,1.0,0.0,0.0,6.0,1.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,USD
+2026-07-17,2026-07-17,Primal Queen,Display (Sponsored Brands) > Sponsored Products > Display (Amazon DSP) > [Purchase],116.0,2.0,0.0,0.0,1.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,USD
+2026-07-13,2026-07-29,Primal Queen,Sponsored Products > Display (Amazon DSP) > Display (Sponsored Brands) > [Purchase],240.0,3.0,182.0,2.0,1.6666666666666667,0.0,10.666666666666666,0.0,0.0,0.0,0.0,0.0,1.3333333333333333,0.0,0.0,USD
+2026-07-03,2026-07-28,Primal Queen,Display (Amazon DSP) > Sponsored Products > Online Video (Sponsored Brands) > [Purchase],283.0,5.0,58.0,1.0,0.0,0.0,4.8,1.4,0.0,0.0,0.0,0.0,2.2,0.0,0.0,USD
+2026-07-10,2026-07-10,Primal Queen,Online Video (Sponsored Brands) > Display (Amazon DSP) > Sponsored Products >  (Sponsored Display) > [Purchase],58.0,1.0,58.0,1.0,0.0,0.0,2.0,1.0,0.0,0.0,0.0,0.0,2.0,1.0,0.0,USD
+2026-07-29,2026-07-29,Primal Queen,Sponsored Products > Online Video (Sponsored Brands) > Display (Sponsored Brands) > [Purchase],58.0,1.0,58.0,1.0,1.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,3.0,0.0,0.0,USD
+2026-07-07,2026-07-07,Primal Queen,Display (Amazon DSP) > Display (Sponsored Brands) > [Purchase],58.0,1.0,0.0,0.0,2.0,0.0,62.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,USD
+2026-07-04,2026-07-29,Primal Queen,(Sponsored Display) > Display (Amazon DSP) > [Purchase],988.0,17.0,406.0,7.0,0.0,0.0,5.0588235294117645,0.0,0.0,0.0,0.0,0.0,0.0,2.764705882352941,0.0,USD
+2026-07-01,2026-07-29,Primal Queen,Online Video (Sponsored Brands) > [Purchase],10969.0,177.0,9353.0,150.0,0.0,0.0,0.0,1.0621468926553672,0.0,0.0,0.0,0.0,0.0,0.0,0.0,USD
+2026-07-17,2026-07-29,Primal Queen,Online Video (Sponsored Brands) >  (Sponsored Display) > [Purchase],348.0,6.0,348.0,6.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,2.3333333333333335,0.0,USD
+2026-07-03,2026-07-28,Primal Queen,Online Video (Sponsored Brands) > Sponsored Products > Display (Amazon DSP) > [Purchase],697.0,12.0,523.0,9.0,0.0,0.0,3.25,1.0833333333333333,0.0,0.0,0.0,0.0,2.1666666666666665,0.0,0.0,USD
+2026-07-05,2026-07-29,Primal Queen,Display (Sponsored Brands) > Sponsored Products > [Purchase],646.0,10.0,414.0,6.0,1.4,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.2,0.0,0.0,USD
+2026-07-11,2026-07-11,Primal Queen,Display (Sponsored Brands) > Sponsored Products > Display (Amazon DSP) > Online Video (Sponsored Brands) > [Purchase],58.0,1.0,0.0,0.0,2.0,0.0,6.0,1.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,USD
+2026-07-05,2026-07-20,Primal Queen,Sponsored Products > Display (Amazon DSP) > Online Video (Sponsored Brands) > [Purchase],292.0,5.0,175.0,3.0,0.0,0.0,9.2,1.0,0.0,0.0,0.0,0.0,3.2,0.0,0.0,USD
+2026-07-01,2026-07-29,Primal Queen,(Sponsored Display) > [Purchase],3249.0,56.0,2727.0,47.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,7.339285714285714,0.0,USD
+2026-07-07,2026-07-07,Primal Queen,Display (Sponsored Brands) > Online Video (Sponsored Brands) > Display (Amazon DSP) > [Purchase],58.0,1.0,58.0,1.0,2.0,0.0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,USD
+2026-07-17,2026-07-17,Primal Queen,Sponsored Products >  (Sponsored Display) > Display (Sponsored Brands) > [Purchase],116.0,2.0,116.0,2.0,2.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,5.0,1.0,0.0,USD
+2026-07-02,2026-07-27,Primal Queen,Sponsored Products > Display (Sponsored Brands) > [Purchase],1220.0,20.0,640.0,10.0,1.35,0.0,0.0,0.0,0.0,0.0,0.0,0.0,2.35,0.0,0.0,USD
+2026-07-15,2026-07-29,Primal Queen,Online Video (Sponsored Brands) > Sponsored Products >  (Sponsored Display) > [Purchase],116.0,2.0,58.0,1.0,0.0,0.0,0.0,1.5,0.0,0.0,0.0,0.0,2.5,2.5,0.0,USD
+2026-07-27,2026-07-27,Primal Queen,Sponsored Products > Display (Amazon DSP) >  (Sponsored Display) > Display (Sponsored Display) > [Purchase],58.0,1.0,58.0,1.0,0.0,3.0,4.0,0.0,0.0,0.0,0.0,0.0,2.0,11.0,0.0,USD
+2026-07-14,2026-07-14,Primal Queen,Sponsored Products > Online Video (Sponsored Brands) >  (Sponsored Display) > Display (Amazon DSP) > [Purchase],58.0,1.0,0.0,0.0,0.0,0.0,4.0,1.0,0.0,0.0,0.0,0.0,1.0,7.0,0.0,USD
+2026-07-01,2026-07-23,Primal Queen,Display (Amazon DSP) > Sponsored Products >  (Sponsored Display) > [Purchase],523.0,9.0,0.0,0.0,0.0,0.0,49.22222222222222,0.0,0.0,0.0,0.0,0.0,2.2222222222222223,7.666666666666667,0.0,USD
+2026-07-07,2026-07-29,Primal Queen,(Sponsored Display) > Online Video (Sponsored Brands) > [Purchase],182.0,2.0,182.0,2.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,USD
+2026-07-03,2026-07-27,Primal Queen,Sponsored Products > Online Video (Sponsored Brands) > Display (Amazon DSP) > [Purchase],406.0,7.0,290.0,5.0,0.0,0.0,3.5714285714285716,1.2857142857142858,0.0,0.0,0.0,0.0,2.142857142857143,0.0,0.0,USD
+2026-07-10,2026-07-26,Primal Queen,Sponsored Products > Online Video (Sponsored Brands) >  (Sponsored Display) > [Purchase],291.0,5.0,174.0,3.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,2.8,2.2,0.0,USD
+2026-07-01,2026-07-29,Primal Queen,Sponsored Products > [Purchase],277703.0,4563.0,202185.0,3331.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.544378698224852,0.0,0.0,USD

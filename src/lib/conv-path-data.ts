@@ -1,285 +1,246 @@
 /**
  * Amazon Sponsored Ads — Conversion Path report parser.
  *
- * Mirai Clinical is the only brand currently subscribed to this report.
- * Source: weekly "Mirai: All Amazon campaigns Conversion path report" emails
- * to ppc@triviumco.com, "Last 30 days" window.
+ * Schema frozen 2026-07-31 against real exports (Primal Queen, Sud Scrub,
+ * Dexas, Paradise Naturals, ProBiora). Amazon's export has 20 columns:
  *
- * The exact CSV schema from Amazon's UI hasn't been frozen in the codebase
- * yet — Amazon occasionally renames columns ("Path" vs "Conversion path"
- * vs "Touchpoint sequence"). This parser detects columns by best-fit name
- * matching so the dashboard keeps working through schema drift.
+ *   Start Date, End Date, Brand, Conversion path, Sales, Purchases,
+ *   New-to-brand product sales, New-to-brand purchases,
+ *   <11 per-ad-type "frequency" columns>, Currency
  *
- * Expected (or best-effort) columns:
- *   - Path / Conversion path / Touchpoint sequence  → string
- *   - Conversions / Path conversions                 → number
- *   - Sales / Path sales / Sales (USD)               → number
- *   - Spend / Path spend / Total spend               → number
- *   - ROAS / Path ROAS                               → number (else derived)
- *   - Conversion rate / Path conversion rate (%)     → number (else derived)
- *   - Path length / Touchpoints / # touchpoints      → number
- *   - Time to conversion / Days to conversion        → number (days)
+ * The frequency columns are the actual signal: each row is one distinct
+ * conversion path, and the frequency columns say how many times each ad type
+ * appeared on it. There is NO cost/spend column, so path-level ROAS cannot be
+ * computed and must never be displayed.
+ *
+ * Rows are grouped into four path types by which ad families appear:
+ *   DSP + Sponsored Ads · Amazon DSP only · Sponsored Ads, multi-touch ·
+ *   Sponsored Ads, single touch
  */
+
+/* ── Column groups ─────────────────────────────────────────── */
+
+const DSP_COLS = [
+  "Amazon DSP display frequency",
+  "Amazon DSP online video frequency",
+  "Amazon DSP streaming TV frequency",
+  "Amazon DSP audio frequency",
+];
+
+const SA_COLS = [
+  "Sponsored Brands display frequency",
+  "Sponsored Display display frequency",
+  "Sponsored Brands video frequency",
+  "Sponsored TV streaming TV frequency",
+  "Sponsored Products frequency",
+  "Sponsored Display frequency",
+  "Sponsored Display online video frequency",
+];
+
+export type PathType =
+  | "DSP + Sponsored Ads"
+  | "Amazon DSP only"
+  | "Sponsored Ads, multi-touch"
+  | "Sponsored Ads, single touch";
+
+/** Display order — also the donut order. */
+export const PATH_TYPE_ORDER: PathType[] = [
+  "DSP + Sponsored Ads",
+  "Amazon DSP only",
+  "Sponsored Ads, multi-touch",
+  "Sponsored Ads, single touch",
+];
+
+/** hsl() strings so the donut stays inside the report's palette. */
+export const PATH_TYPE_COLORS: Record<PathType, string> = {
+  "DSP + Sponsored Ads": "hsl(25, 100%, 50%)",
+  "Amazon DSP only": "hsl(213, 51%, 25%)",
+  "Sponsored Ads, multi-touch": "hsl(36, 78%, 57%)",
+  "Sponsored Ads, single touch": "hsl(210, 10%, 64%)",
+};
+
+/* ── Types ─────────────────────────────────────────────────── */
 
 export interface ConvPathRow {
   path: string;
-  conversions: number;
   sales: number;
-  spend: number;
-  roas: number;
-  convRatePct: number;
-  pathLength: number;
-  timeToConvDays: number;
+  purchases: number;
+  ntbSales: number;
+  ntbPurchases: number;
+  dspTouches: number;
+  saTouches: number;
+  touches: number;
+  pathType: PathType;
   raw: Record<string, string>;
+}
+
+export interface PathTypeGroup {
+  pathType: PathType;
+  paths: number;
+  sales: number;
+  purchases: number;
+  ntbSales: number;
+  ntbPurchases: number;
+  /** Purchase-weighted mean touchpoints on the path. */
+  avgTouches: number;
+  pctOfSales: number;
+  ntbSharePct: number;
+  color: string;
 }
 
 export interface ConvPathSummary {
   rows: ConvPathRow[];
+  groups: PathTypeGroup[];
   totals: {
-    conversions: number;
+    paths: number;
     sales: number;
-    spend: number;
-    roas: number;
+    purchases: number;
+    ntbSales: number;
+    ntbPurchases: number;
+    ntbSharePct: number;
   };
-  topByConversions: ConvPathRow[];
-  topBySales: ConvPathRow[];
-  dspInvolvedShare: {
-    pathCount: number;
-    convCount: number;
-    salesUsd: number;
-    pctOfPaths: number;
-    pctOfConversions: number;
-    pctOfSales: number;
-  };
-  spInvolvedShare: {
-    pathCount: number;
-    convCount: number;
-    salesUsd: number;
-    pctOfPaths: number;
-    pctOfConversions: number;
-    pctOfSales: number;
-  };
-  multiTouchShare: {
-    pathCount: number;
-    convCount: number;
-    pctOfPaths: number;
-    pctOfConversions: number;
-  };
+  period: { start: string; end: string };
+  currency: string;
   hasUsefulData: boolean;
   rawColumnNames: string[];
 }
 
-/* ── Column resolution ─────────────────────────────────────── */
+/* ── CSV parsing ───────────────────────────────────────────── */
 
-const COL = {
-  path: ["path", "conversion path", "touchpoint sequence", "touch points", "touchpoints"],
-  conversions: ["conversions", "path conversions", "total conversions", "purchases"],
-  sales: ["sales", "path sales", "sales (usd)", "sales usd", "total sales", "total sales (usd)"],
-  spend: ["spend", "path spend", "total spend", "cost", "total cost"],
-  roas: ["roas", "path roas", "return on ad spend"],
-  convRate: ["conversion rate", "path conversion rate", "conversion rate (%)", "cvr"],
-  pathLength: ["path length", "touchpoints", "# touchpoints", "number of touchpoints", "length"],
-  timeToConv: ["time to conversion", "days to conversion", "average time to conversion", "avg time to conversion (days)"],
-} as const;
+function parseCsv(raw: string): Record<string, string>[] {
+  const text = raw.replace(/^\uFEFF/, "").replace(/\r\n/g, "\n").trim();
+  if (!text) return [];
+  const lines: string[][] = [];
+  let field = "";
+  let row: string[] = [];
+  let inQuotes = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (inQuotes) {
+      if (c === '"') {
+        if (text[i + 1] === '"') { field += '"'; i++; } else { inQuotes = false; }
+      } else field += c;
+    } else if (c === '"') inQuotes = true;
+    else if (c === ",") { row.push(field); field = ""; }
+    else if (c === "\n") { row.push(field); lines.push(row); row = []; field = ""; }
+    else field += c;
+  }
+  row.push(field);
+  lines.push(row);
 
-function findColumn(headers: string[], candidates: readonly string[]): string | null {
-  const lower = headers.map(h => h.toLowerCase().trim());
-  for (const c of candidates) {
-    const i = lower.indexOf(c);
-    if (i !== -1) return headers[i];
-  }
-  // Fuzzy: any header that CONTAINS one of the candidates
-  for (const c of candidates) {
-    const i = lower.findIndex(h => h.includes(c));
-    if (i !== -1) return headers[i];
-  }
-  return null;
+  const headers = (lines.shift() ?? []).map(h => h.trim());
+  return lines
+    .filter(l => l.some(v => v.trim() !== ""))
+    .map(l => {
+      const o: Record<string, string> = {};
+      headers.forEach((h, i) => { o[h] = (l[i] ?? "").trim(); });
+      return o;
+    });
 }
 
-function num(s: string | undefined | null): number {
-  if (s === undefined || s === null) return 0;
-  const cleaned = String(s).replace(/^="/, "").replace(/"$/, "")
-    .replace(/[,$%]/g, "").trim();
-  const n = parseFloat(cleaned);
+function num(v: string | undefined): number {
+  if (!v) return 0;
+  const n = parseFloat(v.replace(/[$,%\s]/g, "").replace(/,/g, ""));
   return Number.isFinite(n) ? n : 0;
 }
 
-/* ── CSV parsing (handles quoted fields with embedded commas) ── */
-
-function parseCsvLine(line: string): string[] {
-  const out: string[] = [];
-  let i = 0;
-  let cur = "";
-  let inQuotes = false;
-  while (i < line.length) {
-    const ch = line[i];
-    if (inQuotes) {
-      if (ch === '"' && line[i + 1] === '"') {
-        cur += '"';
-        i += 2;
-        continue;
-      }
-      if (ch === '"') {
-        inQuotes = false;
-        i++;
-        continue;
-      }
-      cur += ch;
-      i++;
-      continue;
-    }
-    if (ch === '"') {
-      inQuotes = true;
-      i++;
-      continue;
-    }
-    if (ch === ',') {
-      out.push(cur);
-      cur = "";
-      i++;
-      continue;
-    }
-    cur += ch;
-    i++;
-  }
-  out.push(cur);
-  return out;
+/** Tolerant header lookup — Amazon varies capitalisation between exports. */
+function pick(row: Record<string, string>, name: string): string | undefined {
+  if (name in row) return row[name];
+  const lower = name.toLowerCase();
+  const hit = Object.keys(row).find(k => k.toLowerCase() === lower);
+  return hit ? row[hit] : undefined;
 }
 
-function parseCsv(raw: string): Record<string, string>[] {
-  const cleaned = raw.replace(/^﻿/, "").replace(/\r\n/g, "\n").replace(/\r/g, "\n");
-  const lines = cleaned.split("\n").filter(l => l.trim().length > 0);
-  if (lines.length < 2) return [];
-  const headers = parseCsvLine(lines[0]).map(h => h.trim());
-  return lines.slice(1).map(line => {
-    const cells = parseCsvLine(line);
-    const obj: Record<string, string> = {};
-    headers.forEach((h, i) => { obj[h] = (cells[i] ?? "").trim(); });
-    return obj;
-  });
+function classify(dspTouches: number, saTouches: number): PathType {
+  if (dspTouches > 0 && saTouches > 0) return "DSP + Sponsored Ads";
+  if (dspTouches > 0) return "Amazon DSP only";
+  return dspTouches + saTouches > 1
+    ? "Sponsored Ads, multi-touch"
+    : "Sponsored Ads, single touch";
 }
 
 /* ── Public parser ─────────────────────────────────────────── */
 
 export function parseConvPathReport(raw: string): ConvPathSummary {
-  const rows = parseCsv(raw);
-  if (rows.length === 0) {
-    return emptySummary([]);
-  }
-  const headers = Object.keys(rows[0]);
+  const records = parseCsv(raw);
+  if (records.length === 0) return emptySummary([]);
+  const headers = Object.keys(records[0]);
 
-  const colPath = findColumn(headers, COL.path);
-  const colConv = findColumn(headers, COL.conversions);
-  const colSales = findColumn(headers, COL.sales);
-  const colSpend = findColumn(headers, COL.spend);
-  const colRoas = findColumn(headers, COL.roas);
-  const colConvRate = findColumn(headers, COL.convRate);
-  const colLen = findColumn(headers, COL.pathLength);
-  const colTime = findColumn(headers, COL.timeToConv);
+  const rows: ConvPathRow[] = records
+    .filter(r => (pick(r, "Conversion path") ?? "").trim() !== "")
+    .map(r => {
+      const dspTouches = DSP_COLS.reduce((s, c) => s + num(pick(r, c)), 0);
+      const saTouches = SA_COLS.reduce((s, c) => s + num(pick(r, c)), 0);
+      return {
+        path: (pick(r, "Conversion path") ?? "").trim(),
+        sales: num(pick(r, "Sales")),
+        purchases: num(pick(r, "Purchases")),
+        ntbSales: num(pick(r, "New-to-brand product sales")),
+        ntbPurchases: num(pick(r, "New-to-brand purchases")),
+        dspTouches,
+        saTouches,
+        touches: dspTouches + saTouches,
+        pathType: classify(dspTouches, saTouches),
+        raw: r,
+      };
+    });
 
-  const parsed: ConvPathRow[] = rows.map(r => {
-    const path = colPath ? r[colPath] : "";
-    const conversions = colConv ? num(r[colConv]) : 0;
-    const sales = colSales ? num(r[colSales]) : 0;
-    const spend = colSpend ? num(r[colSpend]) : 0;
-    const roasRaw = colRoas ? num(r[colRoas]) : 0;
-    const cvrRaw = colConvRate ? num(r[colConvRate]) : 0;
-    const lengthRaw = colLen ? num(r[colLen]) : guessPathLength(path);
-    const time = colTime ? num(r[colTime]) : 0;
-    const roas = roasRaw > 0 ? roasRaw : spend > 0 ? sales / spend : 0;
-    const cvr = cvrRaw > 0 ? cvrRaw : 0;
+  const totalSales = rows.reduce((s, r) => s + r.sales, 0);
+  const totalPurch = rows.reduce((s, r) => s + r.purchases, 0);
+  const totalNtbSales = rows.reduce((s, r) => s + r.ntbSales, 0);
+  const totalNtbPurch = rows.reduce((s, r) => s + r.ntbPurchases, 0);
+
+  const groups: PathTypeGroup[] = PATH_TYPE_ORDER.map(pathType => {
+    const gr = rows.filter(r => r.pathType === pathType);
+    const sales = gr.reduce((s, r) => s + r.sales, 0);
+    const purchases = gr.reduce((s, r) => s + r.purchases, 0);
+    const ntbSales = gr.reduce((s, r) => s + r.ntbSales, 0);
+    const touchWeighted = gr.reduce((s, r) => s + r.touches * r.purchases, 0);
     return {
-      path, conversions, sales, spend, roas,
-      convRatePct: cvr, pathLength: lengthRaw, timeToConvDays: time,
-      raw: r,
+      pathType,
+      paths: gr.length,
+      sales,
+      purchases,
+      ntbSales,
+      ntbPurchases: gr.reduce((s, r) => s + r.ntbPurchases, 0),
+      avgTouches: purchases > 0 ? touchWeighted / purchases : 0,
+      pctOfSales: totalSales > 0 ? (sales / totalSales) * 100 : 0,
+      ntbSharePct: sales > 0 ? (ntbSales / sales) * 100 : 0,
+      color: PATH_TYPE_COLORS[pathType],
     };
-  });
+  }).filter(g => g.paths > 0);
 
-  const totalConv = parsed.reduce((s, r) => s + r.conversions, 0);
-  const totalSales = parsed.reduce((s, r) => s + r.sales, 0);
-  const totalSpend = parsed.reduce((s, r) => s + r.spend, 0);
-  const totalRoas = totalSpend > 0 ? totalSales / totalSpend : 0;
-
-  const topByConversions = [...parsed]
-    .sort((a, b) => b.conversions - a.conversions)
-    .slice(0, 10);
-  const topBySales = [...parsed]
-    .sort((a, b) => b.sales - a.sales)
-    .slice(0, 10);
-
-  const isDsp  = (r: ConvPathRow) => /dsp/i.test(r.path) || /display/i.test(r.path);
-  const isSp   = (r: ConvPathRow) =>
-    /\bSP\b|sponsored|sb\b|sd\b|search/i.test(r.path);
-  const isMulti = (r: ConvPathRow) => r.pathLength >= 2;
-
-  const dspRows = parsed.filter(isDsp);
-  const spRows = parsed.filter(isSp);
-  const multiRows = parsed.filter(isMulti);
-  const totalPaths = parsed.length;
-
-  const summary: ConvPathSummary = {
-    rows: parsed,
+  const first = records[0];
+  return {
+    rows,
+    groups,
     totals: {
-      conversions: totalConv,
+      paths: rows.length,
       sales: totalSales,
-      spend: totalSpend,
-      roas: totalRoas,
+      purchases: totalPurch,
+      ntbSales: totalNtbSales,
+      ntbPurchases: totalNtbPurch,
+      ntbSharePct: totalSales > 0 ? (totalNtbSales / totalSales) * 100 : 0,
     },
-    topByConversions,
-    topBySales,
-    dspInvolvedShare: shareSlice(dspRows, totalPaths, totalConv, totalSales),
-    spInvolvedShare: shareSlice(spRows, totalPaths, totalConv, totalSales),
-    multiTouchShare: {
-      pathCount: multiRows.length,
-      convCount: multiRows.reduce((s, r) => s + r.conversions, 0),
-      pctOfPaths: totalPaths > 0 ? (multiRows.length / totalPaths) * 100 : 0,
-      pctOfConversions: totalConv > 0
-        ? (multiRows.reduce((s, r) => s + r.conversions, 0) / totalConv) * 100
-        : 0,
+    period: {
+      start: (pick(first, "Start Date") ?? "").trim(),
+      end: (pick(first, "End Date") ?? "").trim(),
     },
-    hasUsefulData: totalConv > 0 || totalSales > 0,
+    currency: (pick(first, "Currency") ?? "USD").trim() || "USD",
+    hasUsefulData: totalSales > 0 && groups.length > 0,
     rawColumnNames: headers,
   };
-  return summary;
-}
-
-function shareSlice(rows: ConvPathRow[], totalPaths: number, totalConv: number, totalSales: number) {
-  const conv = rows.reduce((s, r) => s + r.conversions, 0);
-  const sales = rows.reduce((s, r) => s + r.sales, 0);
-  return {
-    pathCount: rows.length,
-    convCount: conv,
-    salesUsd: sales,
-    pctOfPaths: totalPaths > 0 ? (rows.length / totalPaths) * 100 : 0,
-    pctOfConversions: totalConv > 0 ? (conv / totalConv) * 100 : 0,
-    pctOfSales: totalSales > 0 ? (sales / totalSales) * 100 : 0,
-  };
-}
-
-function guessPathLength(path: string): number {
-  if (!path) return 0;
-  // "A > B > C" or "A → B → C" or "A -> B -> C"
-  const m = path.split(/\s*(?:>|→|->)\s*/).filter(Boolean);
-  return m.length;
 }
 
 function emptySummary(headers: string[]): ConvPathSummary {
   return {
     rows: [],
-    totals: { conversions: 0, sales: 0, spend: 0, roas: 0 },
-    topByConversions: [],
-    topBySales: [],
-    dspInvolvedShare: zeroShare(),
-    spInvolvedShare: zeroShare(),
-    multiTouchShare: { pathCount: 0, convCount: 0, pctOfPaths: 0, pctOfConversions: 0 },
+    groups: [],
+    totals: { paths: 0, sales: 0, purchases: 0, ntbSales: 0, ntbPurchases: 0, ntbSharePct: 0 },
+    period: { start: "", end: "" },
+    currency: "USD",
     hasUsefulData: false,
     rawColumnNames: headers,
-  };
-}
-
-function zeroShare() {
-  return {
-    pathCount: 0, convCount: 0, salesUsd: 0,
-    pctOfPaths: 0, pctOfConversions: 0, pctOfSales: 0,
   };
 }
