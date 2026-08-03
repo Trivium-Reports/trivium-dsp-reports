@@ -160,14 +160,15 @@ const DSPReport = ({ data, slug }: DSPReportProps) => {
     ntbSales: r.ntbSales,
     dpvRate: r.dpv / (r.impressions || 1) * 100,
     atcRate: r.atc / (r.dpv || 1) * 100,
-    purchaseRate: r.purchases / (r.atc || 1) * 100,
+    // DPV-based: purchases can occur without an ATC, so ATC-based rates exceed 100%
+    purchaseRate: r.purchases / (r.dpv || 1) * 100,
   }));
 
   // Computed
   const conversionRate = data.totalPurchases / (data.totalImpressions || 1) * 100;
   const dpvRate = data.totalDPV / (data.totalImpressions || 1) * 100;
   const atcRate = data.totalATC / (data.totalDPV || 1) * 100;
-  const purchaseRate = data.totalPurchases / (data.totalATC || 1) * 100;
+  const purchaseRate = data.totalPurchases / (data.totalDPV || 1) * 100;
   const avgCPA = data.totalSpend / (data.totalPurchases || 1);
   const ntbCPA = data.totalSpend / (data.totalNTBPurchases || 1);
   const costPerDPV = data.totalSpend / (data.totalDPV || 1);
@@ -194,7 +195,7 @@ const DSPReport = ({ data, slug }: DSPReportProps) => {
       ctr: impressions > 0 ? rows.reduce((s, r) => s + r.ctr * r.impressions, 0) / impressions : 0,
       dpvRate: impressions > 0 ? (dpv / impressions) * 100 : 0,
       atcRate: dpv > 0 ? (atc / dpv) * 100 : 0,
-      purchaseRate: atc > 0 ? (purchases / atc) * 100 : 0,
+      purchaseRate: dpv > 0 ? (purchases / dpv) * 100 : 0,
       ntbPercent: purchases > 0 ? (ntbPurchases / purchases) * 100 : 0,
       roas: spend > 0 ? sales / spend : 0,
       ntbCPA: ntbPurchases > 0 ? spend / ntbPurchases : 0,
@@ -258,7 +259,7 @@ const DSPReport = ({ data, slug }: DSPReportProps) => {
     { metric: "CTR", value: Math.min(data.avgCTR / 0.6 * 100, 100), benchmark: 60 },
     { metric: "DPV Rate", value: Math.min(dpvRate / 2.0 * 100, 100), benchmark: 60 },
     { metric: "ATC Rate", value: Math.min(atcRate / 15 * 100, 100), benchmark: 60 },
-    { metric: "Purch. Rate", value: Math.min(purchaseRate / 45 * 100, 100), benchmark: 60 },
+    { metric: "Purch. Rate", value: Math.min(purchaseRate / 20 * 100, 100), benchmark: 60 },
     { metric: "NTB %", value: Math.min(data.avgNTBPercent / 80 * 100, 100), benchmark: 60 },
     { metric: "ROAS", value: Math.min(data.overallROAS / 10 * 100, 100), benchmark: 60 },
   ];
@@ -294,7 +295,7 @@ const DSPReport = ({ data, slug }: DSPReportProps) => {
   const healthScore = Math.round(
     (Math.min(data.overallROAS / 10, 1) * 30) +
     (Math.min(data.avgNTBPercent / 80, 1) * 25) +
-    (Math.min(purchaseRate / 50, 1) * 25) +
+    (Math.min(purchaseRate / 20, 1) * 25) +
     (Math.min(data.avgCTR / 0.6, 1) * 20)
   );
 
@@ -474,9 +475,9 @@ const DSPReport = ({ data, slug }: DSPReportProps) => {
                   <p className={`font-display font-bold text-[10px] mt-1 ${W2.atcRate >= W1.atcRate ? 'text-emerald-600' : 'text-red-600'}`}>{fmtDeltaPct(W2.atcRate, W1.atcRate)} WoW</p>
                 </div>
                 <div className="bg-background rounded-xl border border-border p-4 text-center">
-                  <p className="font-display font-bold text-[9px] uppercase tracking-[0.15em] text-muted-foreground">ATC → Purchase</p>
+                  <p className="font-display font-bold text-[9px] uppercase tracking-[0.15em] text-muted-foreground">DPV → Purchase</p>
                   <p className="font-display font-extrabold text-2xl text-primary">{fmtPct(purchaseRate)}</p>
-                  <p className="font-body text-[10px] text-muted-foreground">Close Rate</p>
+                  <p className="font-body text-[10px] text-muted-foreground">Purchase Rate</p>
                   <p className={`font-display font-bold text-[10px] mt-1 ${W2.purchaseRate >= W1.purchaseRate ? 'text-emerald-600' : 'text-red-600'}`}>{fmtDeltaPct(W2.purchaseRate, W1.purchaseRate)} WoW</p>
                 </div>
               </div>
