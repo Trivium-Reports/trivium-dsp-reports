@@ -53,6 +53,9 @@ export function parseDSPReport(csvText: string): DSPSummary {
   const lines = csvText.trim().split('\n');
   const headers = lines[0].split(',').map(h => h.replace(/"/g, '').trim());
 
+  // Prefer a real Clicks column when the export includes one; otherwise derive it.
+  const clicksIdx = headers.findIndex(h => /^clicks$/i.test(h));
+
   const rows: DSPDayRow[] = lines.slice(1).map(line => {
     const values: string[] = [];
     let current = '';
@@ -71,8 +74,10 @@ export function parseDSPReport(csvText: string): DSPSummary {
       spend: cleanNum(values[3] || '0'),
       impressions: cleanNum(values[4] || '0'),
       ctr: cleanPct(values[5] || '0'),
-      // Amazon DSP reports do not expose a clicks column; derive it from impressions x CTR
-      clicks: Math.round(cleanNum(values[4] || '0') * cleanPct(values[5] || '0') / 100),
+      clicks: clicksIdx >= 0
+        ? cleanNum(values[clicksIdx] || '0')
+        // fallback for exports built without the Clicks metric: impressions x CTR
+        : Math.round(cleanNum(values[4] || '0') * cleanPct(values[5] || '0') / 100),
       dpv: cleanNum(values[6] || '0'),
       atc: cleanNum(values[7] || '0'),
       purchases: cleanNum(values[8] || '0'),

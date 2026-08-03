@@ -247,7 +247,7 @@ const DSPReport = ({ data, slug }: DSPReportProps) => {
 
   // Funnel
   const funnelData = [
-    { name: "Clickthroughs", value: data.totalClicks },
+    { name: "Clicks", value: data.totalClicks },
     { name: "DPV", value: data.totalDPV },
     { name: "ATC", value: data.totalATC },
     { name: "Purchases", value: data.totalPurchases },
@@ -443,7 +443,7 @@ const DSPReport = ({ data, slug }: DSPReportProps) => {
             <div className="space-y-4">
               <div className="bg-background rounded-xl border border-border p-5">
                 <h3 className="font-display font-extrabold text-sm uppercase tracking-wide text-muted-foreground mb-1">Conversion Funnel Flow</h3>
-                <p className="font-body text-xs text-muted-foreground mb-4">How DSP engagement converts through the purchase journey: clickthroughs → product page visits (DPV) → add to cart (ATC) → purchases. DPV includes view-through visits, so it can exceed clickthroughs.</p>
+                <p className="font-body text-xs text-muted-foreground mb-4">How DSP engagement converts through the purchase journey: clicks → product page visits (DPV) → add to cart (ATC) → purchases. DPV includes view-through visits, so it can exceed clicks.</p>
                 <ResponsiveContainer width="100%" height={260}>
                   <BarChart data={funnelData} layout="vertical">
                     <CartesianGrid strokeDasharray="3 3" stroke="hsl(36, 20%, 88%)" />
