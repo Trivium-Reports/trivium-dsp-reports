@@ -4,6 +4,7 @@ export interface DSPDayRow {
   spend: number;
   impressions: number;
   ctr: number;
+  clicks: number;
   dpv: number;
   atc: number;
   purchases: number;
@@ -26,6 +27,7 @@ export interface DSPSummary {
   dateRange: { start: string; end: string };
   totalSpend: number;
   totalImpressions: number;
+  totalClicks: number;
   avgCTR: number;
   totalDPV: number;
   totalATC: number;
@@ -69,6 +71,8 @@ export function parseDSPReport(csvText: string): DSPSummary {
       spend: cleanNum(values[3] || '0'),
       impressions: cleanNum(values[4] || '0'),
       ctr: cleanPct(values[5] || '0'),
+      // Amazon DSP reports do not expose a clicks column; derive it from impressions x CTR
+      clicks: Math.round(cleanNum(values[4] || '0') * cleanPct(values[5] || '0') / 100),
       dpv: cleanNum(values[6] || '0'),
       atc: cleanNum(values[7] || '0'),
       purchases: cleanNum(values[8] || '0'),
@@ -89,6 +93,7 @@ export function parseDSPReport(csvText: string): DSPSummary {
 
   const totalSpend = rows.reduce((s, r) => s + r.spend, 0);
   const totalImpressions = rows.reduce((s, r) => s + r.impressions, 0);
+  const totalClicks = rows.reduce((s, r) => s + r.clicks, 0);
   const totalDPV = rows.reduce((s, r) => s + r.dpv, 0);
   const totalATC = rows.reduce((s, r) => s + r.atc, 0);
   const totalPurchases = rows.reduce((s, r) => s + r.purchases, 0);
@@ -106,6 +111,7 @@ export function parseDSPReport(csvText: string): DSPSummary {
     },
     totalSpend,
     totalImpressions,
+    totalClicks,
     avgCTR,
     totalDPV,
     totalATC,

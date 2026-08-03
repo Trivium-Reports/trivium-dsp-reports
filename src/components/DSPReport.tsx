@@ -247,7 +247,7 @@ const DSPReport = ({ data, slug }: DSPReportProps) => {
 
   // Funnel
   const funnelData = [
-    { name: "Impressions", value: data.totalImpressions },
+    { name: "Clickthroughs", value: data.totalClicks },
     { name: "DPV", value: data.totalDPV },
     { name: "ATC", value: data.totalATC },
     { name: "Purchases", value: data.totalPurchases },
@@ -443,7 +443,7 @@ const DSPReport = ({ data, slug }: DSPReportProps) => {
             <div className="space-y-4">
               <div className="bg-background rounded-xl border border-border p-5">
                 <h3 className="font-display font-extrabold text-sm uppercase tracking-wide text-muted-foreground mb-1">Conversion Funnel Flow</h3>
-                <p className="font-body text-xs text-muted-foreground mb-4">How DSP ad impressions convert through the purchase journey: views → product page visits (DPV) → add to cart (ATC) → purchases.</p>
+                <p className="font-body text-xs text-muted-foreground mb-4">How DSP engagement converts through the purchase journey: clickthroughs → product page visits (DPV) → add to cart (ATC) → purchases. DPV includes view-through visits, so it can exceed clickthroughs.</p>
                 <ResponsiveContainer width="100%" height={260}>
                   <BarChart data={funnelData} layout="vertical">
                     <CartesianGrid strokeDasharray="3 3" stroke="hsl(36, 20%, 88%)" />
@@ -462,10 +462,10 @@ const DSPReport = ({ data, slug }: DSPReportProps) => {
               {/* Funnel rate cards */}
               <div className="grid grid-cols-3 gap-3">
                 <div className="bg-background rounded-xl border border-border p-4 text-center">
-                  <p className="font-display font-bold text-[9px] uppercase tracking-[0.15em] text-muted-foreground">Impr → DPV</p>
-                  <p className="font-display font-extrabold text-2xl text-primary">{fmtPct(dpvRate)}</p>
-                  <p className="font-body text-[10px] text-muted-foreground">DPV Rate</p>
-                  <p className={`font-display font-bold text-[10px] mt-1 ${W2.dpvRate >= W1.dpvRate ? 'text-emerald-600' : 'text-red-600'}`}>{fmtDeltaPct(W2.dpvRate, W1.dpvRate)} WoW</p>
+                  <p className="font-display font-bold text-[9px] uppercase tracking-[0.15em] text-muted-foreground">Impr → Click</p>
+                  <p className="font-display font-extrabold text-2xl text-primary">{fmtPct(data.avgCTR)}</p>
+                  <p className="font-body text-[10px] text-muted-foreground">CTR</p>
+                  <p className={`font-display font-bold text-[10px] mt-1 ${W2.ctr >= W1.ctr ? 'text-emerald-600' : 'text-red-600'}`}>{fmtDeltaPct(W2.ctr, W1.ctr)} WoW</p>
                 </div>
                 <div className="bg-background rounded-xl border border-border p-4 text-center">
                   <p className="font-display font-bold text-[9px] uppercase tracking-[0.15em] text-muted-foreground">DPV → ATC</p>
