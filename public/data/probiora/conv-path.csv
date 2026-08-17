@@ -1,49 +1,49 @@
 Start Date,End Date,Brand,Conversion path,Sales,Purchases,New-to-brand product sales,New-to-brand purchases,Sponsored Brands display frequency,Sponsored Display display frequency,Amazon DSP display frequency,Sponsored Brands video frequency,Amazon DSP online video frequency,Sponsored TV Streaming TV frequency,Amazon DSP Streaming TV frequency,Amazon DSP audio frequency,Sponsored Products frequency,Sponsored Display frequency,Sponsored Display online video frequency,Currency
-2026-08-01,2026-08-02,ProBiora Health,Online Video (Amazon DSP) > Display (Amazon DSP) > [Purchase],96.9,2.0,0.0,0.0,0.0,0.0,1.0,0.0,1.5,0.0,0.0,0.0,0.0,0.0,0.0,USD
-2026-08-03,2026-08-03,ProBiora Health,Sponsored Products > Display (Sponsored Brands) > Display (Amazon DSP) > [Purchase],74.95,1.0,74.95,1.0,2.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,2.0,0.0,0.0,USD
-2026-07-28,2026-07-31,ProBiora Health,Online Video (Sponsored Brands) > Sponsored Products > [Purchase],43.9,2.0,43.9,2.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,1.5,0.0,0.0,USD
-2026-08-03,2026-08-03,ProBiora Health,Streaming TV (Amazon DSP) > [Purchase],21.95,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,USD
-2026-07-13,2026-08-06,ProBiora Health,Display (Amazon DSP) >  (Sponsored Display) > Sponsored Products > [Purchase],388.6,8.0,96.9,2.0,0.0,0.0,22.875,0.0,0.0,0.0,0.0,0.0,1.375,1.75,0.0,USD
-2026-07-17,2026-07-29,ProBiora Health,Display (Amazon DSP) > Online Video (Amazon DSP) > Sponsored Products > [Purchase],185.93,4.0,0.0,0.0,0.0,0.0,46.5,0.0,10.75,0.0,0.0,0.0,1.75,0.0,0.0,USD
-2026-07-18,2026-08-05,ProBiora Health,Display (Sponsored Brands) > Display (Amazon DSP) > Sponsored Products > [Purchase],101.85,3.0,43.9,2.0,2.0,0.0,2.3333333333333335,0.0,0.0,0.0,0.0,0.0,1.6666666666666667,0.0,0.0,USD
-2026-07-14,2026-07-14,ProBiora Health,Sponsored Products > Display (Amazon DSP) >  (Sponsored Display) > [Purchase],21.95,1.0,0.0,0.0,0.0,0.0,39.0,0.0,0.0,0.0,0.0,0.0,1.0,2.0,0.0,USD
-2026-07-16,2026-07-16,ProBiora Health,Display (Sponsored Brands) > Display (Amazon DSP) >  (Sponsored Display) > [Purchase],21.95,1.0,21.95,1.0,2.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,7.0,0.0,USD
-2026-07-11,2026-08-08,ProBiora Health,Display (Sponsored Brands) > [Purchase],4964.79,103.0,4297.34,92.0,1.233009708737864,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,USD
-2026-07-19,2026-07-21,ProBiora Health,Online Video (Sponsored Brands) > Display (Sponsored Brands) > [Purchase],96.9,2.0,96.9,2.0,1.5,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,USD
-2026-07-11,2026-08-07,ProBiora Health,(Sponsored Display) > Sponsored Products > [Purchase],313.65,6.0,43.9,2.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.8333333333333333,1.5,0.0,USD
-2026-07-11,2026-08-08,ProBiora Health,Sponsored Products > Display (Amazon DSP) > [Purchase],3382.61,78.0,1890.33,39.0,0.0,0.0,7.448717948717949,0.0,0.0,0.0,0.0,0.0,1.9871794871794872,0.0,0.0,USD
-2026-07-21,2026-08-08,ProBiora Health,Online Video (Amazon DSP) > [Purchase],343.5,5.0,39.95,1.0,0.0,0.0,0.0,0.0,1.8,0.0,0.0,0.0,0.0,0.0,0.0,USD
-2026-08-05,2026-08-05,ProBiora Health,Online Video (Sponsored Brands) > Display (Amazon DSP) > [Purchase],74.95,1.0,74.95,1.0,0.0,0.0,19.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,USD
-2026-08-08,2026-08-08,ProBiora Health,Online Video (Amazon DSP) > Display (Amazon DSP) > Sponsored Products > [Purchase],39.95,1.0,0.0,0.0,0.0,0.0,12.0,0.0,4.0,0.0,0.0,0.0,1.0,0.0,0.0,USD
-2026-07-11,2026-08-08,ProBiora Health,Display (Amazon DSP) > [Purchase],13508.14,306.0,1509.52,35.0,0.0,0.0,14.068627450980392,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,USD
-2026-07-26,2026-08-06,ProBiora Health,Online Video (Amazon DSP) > Sponsored Products > [Purchase],246.8,4.0,74.95,1.0,0.0,0.0,0.0,0.0,2.5,0.0,0.0,0.0,1.5,0.0,0.0,USD
-2026-08-05,2026-08-05,ProBiora Health,Sponsored Products >  (Sponsored Display) > Display (Amazon DSP) > [Purchase],74.95,1.0,74.95,1.0,0.0,0.0,2.0,0.0,0.0,0.0,0.0,0.0,2.0,1.0,0.0,USD
-2026-07-18,2026-08-05,ProBiora Health,Sponsored Products > Online Video (Sponsored Brands) > [Purchase],507.45,11.0,260.65,7.0,0.0,0.0,0.0,1.0909090909090908,0.0,0.0,0.0,0.0,2.0,0.0,0.0,USD
-2026-07-20,2026-08-08,ProBiora Health,Display (Amazon DSP) > Online Video (Amazon DSP) > [Purchase],578.25,13.0,61.9,2.0,0.0,0.0,17.615384615384617,0.0,4.538461538461538,0.0,0.0,0.0,0.0,0.0,0.0,USD
-2026-07-17,2026-08-04,ProBiora Health,Sponsored Products >  (Sponsored Display) > [Purchase],278.65,7.0,211.8,4.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,3.4285714285714284,1.1428571428571428,0.0,USD
-2026-08-06,2026-08-06,ProBiora Health,Display (Amazon DSP) > Sponsored Products > Display (Sponsored Brands) > [Purchase],44.9,2.0,0.0,0.0,1.0,0.0,6.5,0.0,0.0,0.0,0.0,0.0,5.0,0.0,0.0,USD
-2026-07-30,2026-08-02,ProBiora Health,Display (Amazon DSP) > Online Video (Amazon DSP) >  (Sponsored Display) > [Purchase],61.9,2.0,0.0,0.0,0.0,0.0,7.5,0.0,1.0,0.0,0.0,0.0,0.0,1.5,0.0,USD
-2026-07-14,2026-07-20,ProBiora Health,Sponsored Products > Display (Sponsored Brands) >  (Sponsored Display) > [Purchase],36.04,2.0,21.95,1.0,2.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,2.0,1.0,0.0,USD
-2026-07-14,2026-07-26,ProBiora Health,Display (Amazon DSP) >  (Sponsored Display) > [Purchase],43.9,2.0,0.0,0.0,0.0,0.0,44.5,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,USD
-2026-07-16,2026-08-06,ProBiora Health,Display (Sponsored Brands) > Display (Amazon DSP) > [Purchase],494.6,8.0,494.6,8.0,1.25,0.0,2.875,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,USD
-2026-08-07,2026-08-07,ProBiora Health,Display (Sponsored Brands) >  (Sponsored Display) > [Purchase],21.95,1.0,21.95,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,USD
-2026-07-11,2026-08-07,ProBiora Health,Display (Amazon DSP) > Sponsored Products > [Purchase],3672.54,74.0,586.17,17.0,0.0,0.0,15.432432432432432,0.0,0.0,0.0,0.0,0.0,1.3243243243243243,0.0,0.0,USD
-2026-07-22,2026-07-31,ProBiora Health,Display (Amazon DSP) > Online Video (Sponsored Brands) > Sponsored Products > [Purchase],96.9,2.0,0.0,0.0,0.0,0.0,6.5,1.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,USD
-2026-07-30,2026-08-07,ProBiora Health,Display (Sponsored Brands) > Sponsored Products > Display (Amazon DSP) > [Purchase],158.8,4.0,43.9,2.0,2.0,0.0,36.25,0.0,0.0,0.0,0.0,0.0,1.25,0.0,0.0,USD
-2026-07-14,2026-07-14,ProBiora Health,Sponsored Products > Display (Amazon DSP) > Display (Sponsored Brands) > [Purchase],21.95,1.0,21.95,1.0,1.0,0.0,6.0,0.0,0.0,0.0,0.0,0.0,2.0,0.0,0.0,USD
-2026-07-18,2026-07-18,ProBiora Health,Display (Amazon DSP) > Sponsored Products > Online Video (Sponsored Brands) > [Purchase],22.95,1.0,0.0,0.0,0.0,0.0,67.0,1.0,0.0,0.0,0.0,0.0,2.0,0.0,0.0,USD
-2026-07-18,2026-07-18,ProBiora Health,Display (Amazon DSP) >  (Sponsored Display) > Online Video (Amazon DSP) > [Purchase],21.95,1.0,0.0,0.0,0.0,0.0,42.0,0.0,3.0,0.0,0.0,0.0,0.0,5.0,0.0,USD
-2026-07-13,2026-08-03,ProBiora Health,Display (Amazon DSP) > Display (Sponsored Brands) > [Purchase],268.75,5.0,96.9,2.0,1.4,0.0,2.2,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,USD
-2026-08-04,2026-08-05,ProBiora Health,(Sponsored Display) > Display (Amazon DSP) > [Purchase],114.9,2.0,0.0,0.0,0.0,0.0,4.5,0.0,0.0,0.0,0.0,0.0,0.0,1.5,0.0,USD
-2026-07-12,2026-08-07,ProBiora Health,Online Video (Sponsored Brands) > [Purchase],1229.85,23.0,974.15,17.0,0.0,0.0,0.0,1.1304347826086956,0.0,0.0,0.0,0.0,0.0,0.0,0.0,USD
-2026-07-29,2026-07-29,ProBiora Health,Online Video (Sponsored Brands) > Sponsored Products > Display (Amazon DSP) > [Purchase],74.95,1.0,74.95,1.0,0.0,0.0,2.0,1.0,0.0,0.0,0.0,0.0,2.0,0.0,0.0,USD
-2026-07-11,2026-08-06,ProBiora Health,Display (Sponsored Brands) > Sponsored Products > [Purchase],1262.9,22.0,1047.15,17.0,1.9545454545454546,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.4545454545454546,0.0,0.0,USD
-2026-07-11,2026-07-30,ProBiora Health,(Sponsored Display) > [Purchase],132.7,6.0,21.95,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.6666666666666667,0.0,USD
-2026-07-12,2026-07-29,ProBiora Health,Sponsored Products > Display (Sponsored Brands) > [Purchase],670.44,14.0,484.5,10.0,1.5714285714285714,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.5,0.0,0.0,USD
-2026-07-27,2026-07-27,ProBiora Health,Display (Amazon DSP) > Sponsored Products > Display (Sponsored Brands) > Online Video (Sponsored Brands) > [Purchase],21.95,1.0,21.95,1.0,3.0,0.0,18.0,1.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,USD
-2026-07-11,2026-07-30,ProBiora Health,Display (Amazon DSP) > Sponsored Products >  (Sponsored Display) > [Purchase],81.94,3.0,0.0,0.0,0.0,0.0,11.0,0.0,0.0,0.0,0.0,0.0,3.3333333333333335,4.666666666666667,0.0,USD
-2026-07-18,2026-07-18,ProBiora Health,Display (Sponsored Brands) >  (Sponsored Display) > Display (Amazon DSP) > [Purchase],21.95,1.0,21.95,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,2.0,0.0,USD
-2026-07-12,2026-07-12,ProBiora Health,Display (Sponsored Brands) > Online Video (Sponsored Brands) > Sponsored Products > [Purchase],74.95,1.0,74.95,1.0,1.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,USD
-2026-07-21,2026-07-21,ProBiora Health,Display (Amazon DSP) > Online Video (Sponsored Brands) > Sponsored Products > Online Video (Amazon DSP) > [Purchase],21.95,1.0,0.0,0.0,0.0,0.0,35.0,1.0,1.0,0.0,0.0,0.0,10.0,0.0,0.0,USD
-2026-07-16,2026-07-20,ProBiora Health,Sponsored Products > Online Video (Sponsored Brands) > Display (Amazon DSP) > [Purchase],96.9,2.0,96.9,2.0,0.0,0.0,5.5,1.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,USD
-2026-07-11,2026-08-08,ProBiora Health,Sponsored Products > [Purchase],40083.13,878.0,28552.67,630.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.530751708428246,0.0,0.0,USD
+2026-08-01 00:00:00,2026-08-13 00:00:00,ProBiora Health,Online Video (Amazon DSP) > Display (Amazon DSP) > [Purchase],234.75,5.0,39.95,1.0,0.0,0.0,4.0,0.0,1.8,0.0,0.0,0.0,0.0,0.0,0.0,USD
+2026-08-03 00:00:00,2026-08-15 00:00:00,ProBiora Health,Sponsored Products > Display (Sponsored Brands) > Display (Amazon DSP) > [Purchase],171.85,3.0,171.85,3.0,1.6666666666666667,0.0,4.333333333333333,0.0,0.0,0.0,0.0,0.0,2.6666666666666665,0.0,0.0,USD
+2026-07-28 00:00:00,2026-08-11 00:00:00,ProBiora Health,Online Video (Sponsored Brands) > Sponsored Products > [Purchase],193.8,4.0,193.8,4.0,0.0,0.0,0.0,1.25,0.0,0.0,0.0,0.0,1.25,0.0,0.0,USD
+2026-08-03 00:00:00,2026-08-03 00:00:00,ProBiora Health,Streaming TV (Amazon DSP) > [Purchase],21.95,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,USD
+2026-07-23 00:00:00,2026-08-06 00:00:00,ProBiora Health,Display (Amazon DSP) >  (Sponsored Display) > Sponsored Products > [Purchase],269.75,5.0,0.0,0.0,0.0,0.0,16.8,0.0,0.0,0.0,0.0,0.0,1.2,1.8,0.0,USD
+2026-07-19 00:00:00,2026-08-14 00:00:00,ProBiora Health,Display (Amazon DSP) > Online Video (Amazon DSP) > Sponsored Products > [Purchase],132.93,4.0,0.0,0.0,0.0,0.0,47.0,0.0,9.75,0.0,0.0,0.0,1.75,0.0,0.0,USD
+2026-07-18 00:00:00,2026-08-05 00:00:00,ProBiora Health,Display (Sponsored Brands) > Display (Amazon DSP) > Sponsored Products > [Purchase],101.85,3.0,43.9,2.0,2.0,0.0,2.3333333333333335,0.0,0.0,0.0,0.0,0.0,1.6666666666666667,0.0,0.0,USD
+2026-08-13 00:00:00,2026-08-13 00:00:00,ProBiora Health,(Sponsored Display) > Display (Amazon DSP) > Display (Sponsored Brands) > [Purchase],74.95,1.0,0.0,0.0,1.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,13.0,0.0,USD
+2026-07-18 00:00:00,2026-08-15 00:00:00,ProBiora Health,Display (Sponsored Brands) > [Purchase],5157.75,102.0,4618.25,92.0,1.303921568627451,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,USD
+2026-07-19 00:00:00,2026-07-21 00:00:00,ProBiora Health,Online Video (Sponsored Brands) > Display (Sponsored Brands) > [Purchase],96.9,2.0,96.9,2.0,1.5,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,USD
+2026-07-20 00:00:00,2026-08-12 00:00:00,ProBiora Health,(Sponsored Display) > Sponsored Products > [Purchase],291.7,5.0,21.95,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.6,1.0,0.0,USD
+2026-07-18 00:00:00,2026-08-15 00:00:00,ProBiora Health,Sponsored Products > Display (Amazon DSP) > [Purchase],4973.67,112.0,2691.44,54.0,0.0,0.0,7.151785714285714,0.0,0.0,0.0,0.0,0.0,2.0535714285714284,0.0,0.0,USD
+2026-07-21 00:00:00,2026-08-13 00:00:00,ProBiora Health,Online Video (Amazon DSP) > [Purchase],493.4,7.0,39.95,1.0,0.0,0.0,0.0,0.0,1.5714285714285714,0.0,0.0,0.0,0.0,0.0,0.0,USD
+2026-08-05 00:00:00,2026-08-13 00:00:00,ProBiora Health,Online Video (Sponsored Brands) > Display (Amazon DSP) > [Purchase],118.85,2.0,74.95,1.0,0.0,0.0,10.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,USD
+2026-08-08 00:00:00,2026-08-10 00:00:00,ProBiora Health,Online Video (Amazon DSP) > Display (Amazon DSP) > Sponsored Products > [Purchase],74.95,1.0,0.0,0.0,0.0,0.0,24.0,0.0,1.0,0.0,0.0,0.0,1.0,0.0,0.0,USD
+2026-07-18 00:00:00,2026-08-15 00:00:00,ProBiora Health,Display (Amazon DSP) > [Purchase],14284.32,323.0,1885.9,40.0,0.0,0.0,14.659442724458204,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,USD
+2026-07-26 00:00:00,2026-08-11 00:00:00,ProBiora Health,Online Video (Amazon DSP) > Sponsored Products > [Purchase],343.7,6.0,149.9,2.0,0.0,0.0,0.0,0.0,2.0,0.0,0.0,0.0,1.3333333333333333,0.0,0.0,USD
+2026-08-05 00:00:00,2026-08-05 00:00:00,ProBiora Health,Sponsored Products >  (Sponsored Display) > Display (Amazon DSP) > [Purchase],74.95,1.0,74.95,1.0,0.0,0.0,2.0,0.0,0.0,0.0,0.0,0.0,2.0,1.0,0.0,USD
+2026-08-14 00:00:00,2026-08-14 00:00:00,ProBiora Health,(Sponsored Display) > Display (Amazon DSP) > Sponsored Products > [Purchase],39.95,1.0,0.0,0.0,0.0,0.0,8.0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,USD
+2026-07-18 00:00:00,2026-08-11 00:00:00,ProBiora Health,Sponsored Products > Online Video (Sponsored Brands) > [Purchase],626.3,14.0,357.55,9.0,0.0,0.0,0.0,1.0714285714285714,0.0,0.0,0.0,0.0,1.7857142857142858,0.0,0.0,USD
+2026-07-20 00:00:00,2026-08-14 00:00:00,ProBiora Health,Display (Amazon DSP) > Online Video (Amazon DSP) > [Purchase],680.09,15.0,61.9,2.0,0.0,0.0,22.4,0.0,4.2,0.0,0.0,0.0,0.0,0.0,0.0,USD
+2026-07-22 00:00:00,2026-08-11 00:00:00,ProBiora Health,Sponsored Products >  (Sponsored Display) > [Purchase],301.6,8.0,136.85,3.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,3.25,1.125,0.0,USD
+2026-08-06 00:00:00,2026-08-06 00:00:00,ProBiora Health,Display (Amazon DSP) > Sponsored Products > Display (Sponsored Brands) > [Purchase],44.9,2.0,0.0,0.0,1.0,0.0,6.5,0.0,0.0,0.0,0.0,0.0,5.0,0.0,0.0,USD
+2026-07-30 00:00:00,2026-08-02 00:00:00,ProBiora Health,Display (Amazon DSP) > Online Video (Amazon DSP) >  (Sponsored Display) > [Purchase],61.9,2.0,0.0,0.0,0.0,0.0,7.5,0.0,1.0,0.0,0.0,0.0,0.0,1.5,0.0,USD
+2026-07-20 00:00:00,2026-08-13 00:00:00,ProBiora Health,Sponsored Products > Display (Sponsored Brands) >  (Sponsored Display) > [Purchase],36.04,2.0,0.0,0.0,7.5,0.0,0.0,0.0,0.0,0.0,0.0,0.0,2.5,1.0,0.0,USD
+2026-08-10 00:00:00,2026-08-10 00:00:00,ProBiora Health,Sponsored Products >  (Sponsored Display) > Display (Amazon DSP) > Display (Sponsored Brands) > [Purchase],21.95,1.0,0.0,0.0,1.0,0.0,18.0,0.0,0.0,0.0,0.0,0.0,2.0,1.0,0.0,USD
+2026-07-26 00:00:00,2026-07-26 00:00:00,ProBiora Health,Display (Amazon DSP) >  (Sponsored Display) > [Purchase],21.95,1.0,0.0,0.0,0.0,0.0,70.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,USD
+2026-07-26 00:00:00,2026-08-13 00:00:00,ProBiora Health,Display (Sponsored Brands) > Display (Amazon DSP) > [Purchase],569.55,9.0,494.6,8.0,1.2222222222222223,0.0,3.7777777777777777,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,USD
+2026-08-07 00:00:00,2026-08-07 00:00:00,ProBiora Health,Display (Sponsored Brands) >  (Sponsored Display) > [Purchase],21.95,1.0,21.95,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,USD
+2026-07-18 00:00:00,2026-08-15 00:00:00,ProBiora Health,Display (Amazon DSP) > Sponsored Products > [Purchase],3671.34,69.0,561.45,11.0,0.0,0.0,12.0,0.0,0.0,0.0,0.0,0.0,1.2608695652173914,0.0,0.0,USD
+2026-07-22 00:00:00,2026-07-31 00:00:00,ProBiora Health,Display (Amazon DSP) > Online Video (Sponsored Brands) > Sponsored Products > [Purchase],96.9,2.0,0.0,0.0,0.0,0.0,6.5,1.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,USD
+2026-07-30 00:00:00,2026-08-07 00:00:00,ProBiora Health,Display (Sponsored Brands) > Sponsored Products > Display (Amazon DSP) > [Purchase],158.8,4.0,43.9,2.0,2.0,0.0,36.25,0.0,0.0,0.0,0.0,0.0,1.25,0.0,0.0,USD
+2026-07-18 00:00:00,2026-07-18 00:00:00,ProBiora Health,Display (Amazon DSP) > Sponsored Products > Online Video (Sponsored Brands) > [Purchase],22.95,1.0,0.0,0.0,0.0,0.0,67.0,1.0,0.0,0.0,0.0,0.0,2.0,0.0,0.0,USD
+2026-07-18 00:00:00,2026-08-14 00:00:00,ProBiora Health,Display (Amazon DSP) >  (Sponsored Display) > Online Video (Amazon DSP) > [Purchase],43.9,2.0,0.0,0.0,0.0,0.0,26.5,0.0,4.5,0.0,0.0,0.0,0.0,3.0,0.0,USD
+2026-07-25 00:00:00,2026-08-13 00:00:00,ProBiora Health,Display (Amazon DSP) > Display (Sponsored Brands) > [Purchase],251.75,5.0,154.85,3.0,1.4,0.0,3.4,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,USD
+2026-08-04 00:00:00,2026-08-05 00:00:00,ProBiora Health,(Sponsored Display) > Display (Amazon DSP) > [Purchase],114.9,2.0,0.0,0.0,0.0,0.0,4.5,0.0,0.0,0.0,0.0,0.0,0.0,1.5,0.0,USD
+2026-07-19 00:00:00,2026-08-15 00:00:00,ProBiora Health,Online Video (Sponsored Brands) > [Purchase],1264.85,23.0,859.25,15.0,0.0,0.0,0.0,1.0869565217391304,0.0,0.0,0.0,0.0,0.0,0.0,0.0,USD
+2026-07-29 00:00:00,2026-07-29 00:00:00,ProBiora Health,Online Video (Sponsored Brands) > Sponsored Products > Display (Amazon DSP) > [Purchase],74.95,1.0,74.95,1.0,0.0,0.0,2.0,1.0,0.0,0.0,0.0,0.0,2.0,0.0,0.0,USD
+2026-08-15 00:00:00,2026-08-15 00:00:00,ProBiora Health,Display (Amazon DSP) > Display (Sponsored Brands) > Sponsored Products > [Purchase],22.95,1.0,0.0,0.0,2.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,3.0,0.0,0.0,USD
+2026-07-18 00:00:00,2026-08-15 00:00:00,ProBiora Health,Display (Sponsored Brands) > Sponsored Products > [Purchase],1342.8,24.0,1202.0,20.0,2.0416666666666665,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.375,0.0,0.0,USD
+2026-07-25 00:00:00,2026-08-11 00:00:00,ProBiora Health,(Sponsored Display) > [Purchase],313.65,6.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.6666666666666667,0.0,USD
+2026-07-18 00:00:00,2026-08-14 00:00:00,ProBiora Health,Sponsored Products > Display (Sponsored Brands) > [Purchase],803.3,13.0,440.6,8.0,1.4615384615384615,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.7692307692307692,0.0,0.0,USD
+2026-07-27 00:00:00,2026-07-27 00:00:00,ProBiora Health,Display (Amazon DSP) > Sponsored Products > Display (Sponsored Brands) > Online Video (Sponsored Brands) > [Purchase],21.95,1.0,21.95,1.0,3.0,0.0,18.0,1.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,USD
+2026-07-23 00:00:00,2026-07-30 00:00:00,ProBiora Health,Display (Amazon DSP) > Sponsored Products >  (Sponsored Display) > [Purchase],67.85,2.0,0.0,0.0,0.0,0.0,6.5,0.0,0.0,0.0,0.0,0.0,3.0,6.5,0.0,USD
+2026-07-18 00:00:00,2026-07-18 00:00:00,ProBiora Health,Display (Sponsored Brands) >  (Sponsored Display) > Display (Amazon DSP) > [Purchase],21.95,1.0,21.95,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,2.0,0.0,USD
+2026-07-21 00:00:00,2026-07-21 00:00:00,ProBiora Health,Display (Amazon DSP) > Online Video (Sponsored Brands) > Sponsored Products > Online Video (Amazon DSP) > [Purchase],21.95,1.0,0.0,0.0,0.0,0.0,35.0,1.0,1.0,0.0,0.0,0.0,10.0,0.0,0.0,USD
+2026-07-20 00:00:00,2026-07-20 00:00:00,ProBiora Health,Sponsored Products > Online Video (Sponsored Brands) > Display (Amazon DSP) > [Purchase],21.95,1.0,21.95,1.0,0.0,0.0,2.0,1.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,USD
+2026-07-18 00:00:00,2026-08-15 00:00:00,ProBiora Health,Sponsored Products > [Purchase],39205.19,831.0,26321.47,569.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.5174488567990374,0.0,0.0,USD
