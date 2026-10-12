@@ -1,30 +1,31 @@
 Start Date,End Date,Brand,Conversion path,Sales,Purchases,New-to-brand product sales,New-to-brand purchases,Sponsored Brands display frequency,Sponsored Display display frequency,Amazon DSP display frequency,Sponsored Brands video frequency,Amazon DSP online video frequency,Sponsored TV streaming TV frequency,Amazon DSP streaming TV frequency,Amazon DSP audio frequency,Sponsored Products frequency,Sponsored Display frequency,Sponsored Display online video frequency,Currency
-2026-09-07 00:00:00,2026-09-28 00:00:00,Dexas,Sponsored Products > Display (Sponsored Brands) > Display (Amazon DSP) > [Purchase],115.84,9.0,97.9,7.0,1.2222222222222223,0.0,2.888888888888889,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,USD
-2026-09-06 00:00:00,2026-10-01 00:00:00,Dexas,Online Video (Sponsored Brands) > Sponsored Products > [Purchase],135.49,8.0,120.63,7.0,0.0,0.0,0.0,1.375,0.0,0.0,0.0,0.0,2.25,0.0,0.0,USD
+2026-09-11 00:00:00,2026-09-28 00:00:00,Dexas,Sponsored Products > Display (Sponsored Brands) > Display (Amazon DSP) > [Purchase],104.9,7.0,104.9,7.0,1.2857142857142858,0.0,2.7142857142857144,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,USD
+2026-09-13 00:00:00,2026-10-09 00:00:00,Dexas,Online Video (Sponsored Brands) > Sponsored Products > [Purchase],198.34,13.0,166.49,11.0,0.0,0.0,0.0,1.3076923076923077,0.0,0.0,0.0,0.0,2.076923076923077,0.0,0.0,USD
 2026-09-23 00:00:00,2026-09-23 00:00:00,Dexas,Display (Amazon DSP) >  (Sponsored Display) > Sponsored Products > [Purchase],23.49,2.0,0.0,0.0,0.0,0.0,17.0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,USD
-2026-09-04 00:00:00,2026-09-28 00:00:00,Dexas,Display (Sponsored Brands) > Display (Amazon DSP) > Sponsored Products > [Purchase],108.71,7.0,77.98,5.0,1.2857142857142858,0.0,6.285714285714286,0.0,0.0,0.0,0.0,0.0,1.1428571428571428,0.0,0.0,USD
-2026-09-04 00:00:00,2026-09-28 00:00:00,Dexas,Sponsored Products > Display (Amazon DSP) >  (Sponsored Display) > [Purchase],35.88,3.0,35.88,3.0,0.0,0.0,4.333333333333333,0.0,0.0,0.0,0.0,0.0,1.3333333333333333,1.0,0.0,USD
-2026-09-04 00:00:00,2026-10-03 00:00:00,Dexas,Display (Sponsored Brands) > [Purchase],10916.24,759.0,10274.06,711.0,1.1989459815546772,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,USD
+2026-09-12 00:00:00,2026-10-04 00:00:00,Dexas,Display (Sponsored Brands) > Display (Amazon DSP) > Sponsored Products > [Purchase],82.75,6.0,70.93,5.0,1.1666666666666667,0.0,3.6666666666666665,0.0,0.0,0.0,0.0,0.0,1.3333333333333333,0.0,0.0,USD
+2026-09-21 00:00:00,2026-10-05 00:00:00,Dexas,Sponsored Products > Display (Amazon DSP) >  (Sponsored Display) > [Purchase],36.43,3.0,36.43,3.0,0.0,0.0,3.6666666666666665,0.0,0.0,0.0,0.0,0.0,1.0,2.0,0.0,USD
+2026-09-11 00:00:00,2026-10-09 00:00:00,Dexas,Display (Sponsored Brands) > [Purchase],11318.3,796.0,10750.5,752.0,1.1896984924623115,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,USD
 2026-10-03 00:00:00,2026-10-03 00:00:00,Dexas,Online Video (Sponsored Brands) > Display (Sponsored Brands) > [Purchase],37.0,2.0,37.0,2.0,1.0,0.0,0.0,2.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,USD
-2026-09-07 00:00:00,2026-09-26 00:00:00,Dexas,Display (Amazon DSP) > Online Video (Sponsored Brands) > [Purchase],31.99,2.0,15.0,1.0,0.0,0.0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,USD
-2026-09-04 00:00:00,2026-10-03 00:00:00,Dexas,Sponsored Products > Display (Amazon DSP) > [Purchase],9181.89,565.0,7735.33,481.0,0.0,0.0,2.7964601769911503,0.0,0.0,0.0,0.0,0.0,1.736283185840708,0.0,0.0,USD
-2026-09-24 00:00:00,2026-10-03 00:00:00,Dexas,Online Video (Sponsored Brands) > Display (Amazon DSP) > [Purchase],90.76,6.0,90.76,6.0,0.0,0.0,1.8333333333333333,1.1666666666666667,0.0,0.0,0.0,0.0,0.0,0.0,0.0,USD
-2026-09-08 00:00:00,2026-09-08 00:00:00,Dexas,Display (Sponsored Brands) > Online Video (Sponsored Brands) > [Purchase],17.92,1.0,17.92,1.0,1.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,USD
-2026-09-04 00:00:00,2026-10-03 00:00:00,Dexas,Display (Amazon DSP) > [Purchase],17986.07,1102.0,13577.76,907.0,0.0,0.0,3.765880217785844,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,USD
-2026-09-07 00:00:00,2026-10-02 00:00:00,Dexas,Sponsored Products > Online Video (Sponsored Brands) > [Purchase],259.26,19.0,259.26,19.0,0.0,0.0,0.0,1.263157894736842,0.0,0.0,0.0,0.0,1.5789473684210527,0.0,0.0,USD
-2026-09-07 00:00:00,2026-10-03 00:00:00,Dexas,Sponsored Products >  (Sponsored Display) > [Purchase],83.0,7.0,68.01,5.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.4285714285714286,1.0,0.0,USD
-2026-09-09 00:00:00,2026-09-30 00:00:00,Dexas,Display (Amazon DSP) >  (Sponsored Display) > [Purchase],58.07,4.0,58.07,4.0,0.0,0.0,20.5,0.0,0.0,0.0,0.0,0.0,0.0,1.5,0.0,USD
-2026-09-04 00:00:00,2026-10-03 00:00:00,Dexas,Display (Sponsored Brands) > Display (Amazon DSP) > [Purchase],1201.28,92.0,1137.49,85.0,1.2391304347826086,0.0,3.3043478260869565,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,USD
+2026-10-09 00:00:00,2026-10-09 00:00:00,Dexas,(Sponsored Display) > Sponsored Products > [Purchase],7.94,1.0,7.94,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,2.0,1.0,0.0,USD
+2026-09-26 00:00:00,2026-09-26 00:00:00,Dexas,Display (Amazon DSP) > Online Video (Sponsored Brands) > [Purchase],15.0,1.0,15.0,1.0,0.0,0.0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,USD
+2026-09-11 00:00:00,2026-10-09 00:00:00,Dexas,Sponsored Products > Display (Amazon DSP) > [Purchase],10341.64,666.0,9099.33,581.0,0.0,0.0,2.750750750750751,0.0,0.0,0.0,0.0,0.0,1.6291291291291292,0.0,0.0,USD
+2026-09-13 00:00:00,2026-10-06 00:00:00,Dexas,Online Video (Sponsored Brands) > Display (Amazon DSP) > [Purchase],164.77,10.0,164.77,10.0,0.0,0.0,2.0,1.1,0.0,0.0,0.0,0.0,0.0,0.0,0.0,USD
+2026-10-05 00:00:00,2026-10-05 00:00:00,Dexas,Display (Sponsored Brands) > Online Video (Sponsored Brands) > [Purchase],15.0,1.0,15.0,1.0,3.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,USD
+2026-09-11 00:00:00,2026-10-09 00:00:00,Dexas,Display (Amazon DSP) > [Purchase],20413.94,1303.0,15944.67,1105.0,0.0,0.0,3.5863392171910973,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,USD
+2026-09-12 00:00:00,2026-10-09 00:00:00,Dexas,Sponsored Products > Online Video (Sponsored Brands) > [Purchase],412.25,26.0,404.0,25.0,0.0,0.0,0.0,1.1923076923076923,0.0,0.0,0.0,0.0,1.6153846153846154,0.0,0.0,USD
+2026-09-11 00:00:00,2026-10-08 00:00:00,Dexas,Sponsored Products >  (Sponsored Display) > [Purchase],73.17,7.0,59.68,5.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.4285714285714286,1.1428571428571428,0.0,USD
+2026-09-17 00:00:00,2026-09-30 00:00:00,Dexas,Display (Amazon DSP) >  (Sponsored Display) > [Purchase],50.13,3.0,50.13,3.0,0.0,0.0,25.0,0.0,0.0,0.0,0.0,0.0,0.0,1.3333333333333333,0.0,USD
+2026-09-11 00:00:00,2026-10-09 00:00:00,Dexas,Display (Sponsored Brands) > Display (Amazon DSP) > [Purchase],1073.98,85.0,988.14,77.0,1.2,0.0,3.623529411764706,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,USD
 2026-09-12 00:00:00,2026-09-12 00:00:00,Dexas,Display (Sponsored Brands) >  (Sponsored Display) > [Purchase],15.92,2.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,USD
-2026-09-04 00:00:00,2026-10-03 00:00:00,Dexas,Display (Amazon DSP) > Sponsored Products > [Purchase],2466.47,144.0,1797.25,105.0,0.0,0.0,6.097222222222222,0.0,0.0,0.0,0.0,0.0,1.4583333333333333,0.0,0.0,USD
-2026-09-19 00:00:00,2026-09-20 00:00:00,Dexas,Display (Sponsored Brands) > Sponsored Products > Display (Amazon DSP) > [Purchase],28.49,2.0,28.49,2.0,1.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,1.5,0.0,0.0,USD
-2026-09-08 00:00:00,2026-09-26 00:00:00,Dexas,Sponsored Products > Display (Amazon DSP) > Display (Sponsored Brands) > [Purchase],50.03,3.0,25.0,2.0,1.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,1.3333333333333333,0.0,0.0,USD
-2026-09-04 00:00:00,2026-10-02 00:00:00,Dexas,Display (Amazon DSP) > Display (Sponsored Brands) > [Purchase],165.05,12.0,115.84,8.0,1.0833333333333333,0.0,5.083333333333333,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,USD
-2026-09-04 00:00:00,2026-10-03 00:00:00,Dexas,Online Video (Sponsored Brands) > [Purchase],1004.11,66.0,961.37,63.0,0.0,0.0,0.0,1.303030303030303,0.0,0.0,0.0,0.0,0.0,0.0,0.0,USD
-2026-09-06 00:00:00,2026-09-20 00:00:00,Dexas,Online Video (Sponsored Brands) > Sponsored Products > Display (Amazon DSP) > [Purchase],24.68,2.0,12.99,1.0,0.0,0.0,6.0,1.0,0.0,0.0,0.0,0.0,2.0,0.0,0.0,USD
-2026-09-04 00:00:00,2026-10-02 00:00:00,Dexas,Display (Sponsored Brands) > Sponsored Products > [Purchase],895.17,60.0,765.5,49.0,1.4,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.5,0.0,0.0,USD
-2026-09-24 00:00:00,2026-10-01 00:00:00,Dexas,(Sponsored Display) > [Purchase],31.99,2.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.5,0.0,USD
-2026-09-05 00:00:00,2026-10-02 00:00:00,Dexas,Sponsored Products > Display (Sponsored Brands) > [Purchase],901.97,65.0,701.55,49.0,1.1692307692307693,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.4461538461538461,0.0,0.0,USD
-2026-09-04 00:00:00,2026-09-04 00:00:00,Dexas,Display (Amazon DSP) > Sponsored Products >  (Sponsored Display) > [Purchase],7.94,1.0,7.94,1.0,0.0,0.0,6.0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,USD
-2026-09-09 00:00:00,2026-09-23 00:00:00,Dexas,Sponsored Products > Online Video (Sponsored Brands) > Display (Amazon DSP) > [Purchase],33.43,3.0,7.94,1.0,0.0,0.0,5.0,2.0,0.0,0.0,0.0,0.0,2.3333333333333335,0.0,0.0,USD
-2026-09-04 00:00:00,2026-10-03 00:00:00,Dexas,Sponsored Products > [Purchase],82635.11,4837.0,72880.5,4392.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.4786024395286335,0.0,0.0,USD
+2026-09-11 00:00:00,2026-10-09 00:00:00,Dexas,Display (Amazon DSP) > Sponsored Products > [Purchase],2625.63,159.0,2027.77,125.0,0.0,0.0,5.182389937106918,0.0,0.0,0.0,0.0,0.0,1.440251572327044,0.0,0.0,USD
+2026-09-19 00:00:00,2026-10-08 00:00:00,Dexas,Display (Sponsored Brands) > Sponsored Products > Display (Amazon DSP) > [Purchase],103.96,7.0,88.97,6.0,1.4285714285714286,0.0,1.1428571428571428,0.0,0.0,0.0,0.0,0.0,1.4285714285714286,0.0,0.0,USD
+2026-09-26 00:00:00,2026-10-04 00:00:00,Dexas,Sponsored Products > Display (Amazon DSP) > Display (Sponsored Brands) > [Purchase],52.02,2.0,26.99,1.0,1.0,0.0,1.5,0.0,0.0,0.0,0.0,0.0,2.0,0.0,0.0,USD
+2026-09-12 00:00:00,2026-10-06 00:00:00,Dexas,Display (Amazon DSP) > Display (Sponsored Brands) > [Purchase],114.93,9.0,81.99,6.0,1.0,0.0,4.888888888888889,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,USD
+2026-09-11 00:00:00,2026-10-09 00:00:00,Dexas,Online Video (Sponsored Brands) > [Purchase],920.29,60.0,871.5,57.0,0.0,0.0,0.0,1.2833333333333334,0.0,0.0,0.0,0.0,0.0,0.0,0.0,USD
+2026-09-20 00:00:00,2026-09-20 00:00:00,Dexas,Online Video (Sponsored Brands) > Sponsored Products > Display (Amazon DSP) > [Purchase],11.69,1.0,0.0,0.0,0.0,0.0,7.0,1.0,0.0,0.0,0.0,0.0,2.0,0.0,0.0,USD
+2026-10-07 00:00:00,2026-10-07 00:00:00,Dexas,Display (Amazon DSP) > Display (Sponsored Brands) > Sponsored Products > [Purchase],10.0,1.0,10.0,1.0,1.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,USD
+2026-09-11 00:00:00,2026-10-09 00:00:00,Dexas,Display (Sponsored Brands) > Sponsored Products > [Purchase],1021.04,70.0,884.36,59.0,1.4,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.2857142857142858,0.0,0.0,USD
+2026-09-24 00:00:00,2026-10-09 00:00:00,Dexas,(Sponsored Display) > [Purchase],53.42,4.0,21.43,2.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.25,0.0,USD
+2026-09-11 00:00:00,2026-10-09 00:00:00,Dexas,Sponsored Products > Display (Sponsored Brands) > [Purchase],851.88,60.0,666.94,47.0,1.1666666666666667,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.4,0.0,0.0,USD
+2026-09-13 00:00:00,2026-09-23 00:00:00,Dexas,Sponsored Products > Online Video (Sponsored Brands) > Display (Amazon DSP) > [Purchase],38.7,3.0,13.21,1.0,0.0,0.0,5.0,2.3333333333333335,0.0,0.0,0.0,0.0,3.3333333333333335,0.0,0.0,USD
+2026-09-11 00:00:00,2026-10-09 00:00:00,Dexas,Sponsored Products > [Purchase],82631.39,5034.0,74977.77,4608.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.44020659515296,0.0,0.0,USD
